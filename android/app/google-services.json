@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "248214315679",
+    "firebase_url": "https://godsman.firebaseio.com",
+    "project_id": "godsman",
+    "storage_bucket": "godsman.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:248214315679:android:b7913b9f31815bb1b7f8aa",
+        "android_client_info": {
+          "package_name": "com.godsman.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "248214315679-up7oulh2onsvm4i6rls95le3t6b6lhhr.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.godsman.app",
+            "certificate_hash": "306f54e8e359f8ddf947dbdf6dca0a0bcf63317a"
+          }
+        },
+        {
+          "client_id": "248214315679-60kibk01qa6t35r1iu0v466ap1nlsvli.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjcaDajTqE-BmK0aMGN5anq6b8vbExSt4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "248214315679-60kibk01qa6t35r1iu0v466ap1nlsvli.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
