@@ -4,18 +4,39 @@ import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
 import {
   Dimensions,
-  Text
+  Text,
+  Image,
+  View,
+  TouchableOpacity
 } from 'react-native';
 import SignIn from '../app/screens/SignIn';
 import Home from '../app/screens/Home';
 import MyBooking from "../app/screens/MyBooking/MyBooking";
 import SideNav from '../app/components/SideNav';
-import DateTime from "../app/screens/DateTime"
+import DateTime from "../app/screens/DateTime";
+import Location from "../app/screens/Location";
+import BookingComplete from "../app/screens/BookingComplete";
+import CallUs from "../app/screens/CallUs";
+import TopHeader from '../app/components/Header'
+import MenuBtn from "../app/assets/images/menu-btn.png"
 
 const AuthRoute = createStackNavigator(
   {
-    SignIn: {screen: SignIn},
-    DateTime: {screen: DateTime}
+    SignIn: { 
+      screen: SignIn,
+    },
+    DateTime: { 
+      screen: DateTime,
+    },
+    Location: { 
+      screen: Location
+    },
+    BookingComplete: {
+      screen: BookingComplete
+    },
+    CallUs: {
+      screen: CallUs
+    }
   },
   {
     initialRouteName: 'SignIn',

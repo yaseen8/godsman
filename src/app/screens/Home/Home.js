@@ -130,6 +130,7 @@ const styles = StyleSheet.create({
     width: '100%',
     flex: 1,
     position: 'relative',
+    zIndex: -1,
   },
   positionTitle: {
     position: 'absolute',
@@ -142,17 +143,17 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   titleText: {
-    fontSize: 36,
+    fontSize: 34,
     lineHeight: 39,
     fontWeight: '300',
     color: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#fff',
   },
-  arrowIcon: {
-    width: 30,
-    height: 20,
-  },
+  // arrowIcon: {
+  //     width: 30,
+  //     height: 20
+  // },
 
   dropdownApp: {
     backgroundColor: '#fff',
@@ -163,11 +164,12 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
     paddingVertical: 5,
     position: 'absolute',
-    bottom: '-50%',
+    top: '75%',
     left: 0,
-    width: '93%',
+    width: '90%',
+    maxHeight: 200,
     display: 'none',
-    // opacity: 0,
+    // opacity: 0
   },
   dropdownLink: {
     paddingVertical: 10,
@@ -185,7 +187,6 @@ const styles = StyleSheet.create({
   },
   slideBadges: {
     flexDirection: 'row',
-    marginBottom: 25,
   },
   slideBadge: {
     paddingHorizontal: 10,
@@ -220,6 +221,7 @@ const styles = StyleSheet.create({
   slideBoxes: {
     flexDirection: 'row',
     flex: 1,
+    marginTop: 25,
   },
   iconBox: {
     width: '25%',
@@ -274,13 +276,13 @@ const styles = StyleSheet.create({
     marginBottom: 5,
   },
   stepDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
+    width: 14,
+    height: 14,
+    borderRadius: 7,
     backgroundColor: '#ffcd28',
     borderWidth: 1,
     borderColor: '#989487',
-    marginRight: 5,
+    marginRight: 10,
   },
   stepText: {
     fontSize: 16,
@@ -288,7 +290,8 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   stepDesc: {
-    fontSize: 14,
+    fontSize: 16,
+    lineHeight: 17,
     color: '#6f6f6f',
   },
   stepBtnDisabled: {
@@ -308,8 +311,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f88613',
   },
   stepArrow: {
-    width: 30,
-    height: 25,
+    // width: 30,
+    // height: 25,
     transform: [{rotate: '-90deg'}],
     marginLeft: 6,
   },

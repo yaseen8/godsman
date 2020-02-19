@@ -12,24 +12,33 @@ import {connect} from 'react-redux';
 import {commonActions} from '../../redux/common/actions';
 import MenuBtn from "../../assets/images/menu-btn.png"
 import UserIcon from "../../assets/images/user-icon.png"
+import {NavigationActions} from 'react-navigation'
+import {DrawerActions} from 'react-navigation-drawer';
 
 
 
-
-const TopHeader = props => {
+const TopHeader = (props) => {
+   console.log('letseiiii', props);
+   
   const {toggleSideBar} = props;
   const openDrawer = () => {
     toggleSideBar(props);
   };
   return (
     <View style={styles.header}>
-        <TouchableOpacity style={styles.drawerBtn}>
+        <TouchableOpacity style={styles.drawerBtn} onPress={()=>openDrawer()}>
             <Image style={styles.drawerBtnImg} source={MenuBtn} />
         </TouchableOpacity>
-        <TouchableOpacity style={styles.userBtn}>
+        {props.callUs? null:
+        <TouchableOpacity 
+            style={styles.userBtn}
+            // onPress={navigateToCallus.bind(this)}
+            onPress={() => props.navigation.navigate("CallUs")}
+        >
             <Image source={UserIcon}  style={styles.userBtnImg} />
             <View style={styles.dotUser}></View>
         </TouchableOpacity>
+}
     </View>
   );
 };
