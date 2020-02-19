@@ -2,27 +2,44 @@ import React, {useEffect, useState} from 'react';
 import {authActions} from '../../redux/auth/actions';
 import {connect} from 'react-redux';
 import {StyleSheet} from 'react-native';
-import {colors, fonts} from '../../styles/index';
-import firebase from 'firebase';
 
 import {View, Text, TextInput, ImageBackground, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import BgPattern from '../../assets/images/bg2.png';
+import {authConstants} from '../../redux/auth/constants';
+import {AsyncStorage} from 'react-native';
 
 const SignIn = props => {
-  // const navigation = useNavigation();
+  useEffect(() => {
+    const user = retrieveData();
+    if (user) {
+      props.navigation.navigate('App');
+    }
+  });
+
+  const retrieveData = async () => {
+    try {
+      const value = await AsyncStorage.getItem('_user');
+      if (value !== null) {
+        console.log(JSON.parse(value));
+        return JSON.parse(value);
+      }
+      return null;
+    } catch (error) {
+      return null;
+      // Error retrieving data
+    }
+  };
+
   const {login, confirmationResult, confirmCode} = props;
   const [auth, setAuth] = useState({number: '', code: ''});
-  const goToHome = () => {
-    props.navigation.navigate('App');
-  };
   const userLogin = () => {
     // alert(verificationCode);
     login(auth);
   };
   const codeConfirmation = () => {
     // alert(JSON.stringify(confirmationResult));
-    confirmCode(confirmationResult, auth.code);
+    confirmCode(confirmationResult, auth.code, props);
   };
   return (
     <View style={styles.signIn_wrap}>

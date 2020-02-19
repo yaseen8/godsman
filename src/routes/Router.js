@@ -37,7 +37,7 @@ const AppRoute = createDrawerNavigator(
     initialRouteName: 'Home',
     contentComponent: SideNav,
   },
-  
+
 );
 
 const MainNavigation = createSwitchNavigator(
@@ -46,7 +46,7 @@ const MainNavigation = createSwitchNavigator(
     App: AppRoute,
   },
   {
-    initialRouteName: 'App',
+    initialRouteName: 'Auth',
   },
 );
 

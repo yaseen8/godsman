@@ -1,6 +1,7 @@
 import {authConstants} from './constants';
 // import API from "../helpers/api";
 import firebase from 'react-native-firebase';
+import {AsyncStorage} from 'react-native';
 
 const login = auth => dispatch => {
   dispatch({type: authConstants.LOGIN_REQUEST});
@@ -10,12 +11,6 @@ const login = auth => dispatch => {
     .signInWithPhoneNumber(auth.number)
     .then(data => {
       dispatch({type: authConstants.CODE_RECEIVED, payload: data});
-      // alert(JSON.stringify(data));
-      // console.log('user', data);
-      // localStorage.setItem('_token', data.user.refreshToken);
-      // localStorage.setItem('_userData', JSON.stringify(data.user));
-      // dispatch({type: authConstants.LOGIN_SUCCESS, payload: data.user});
-      // history.push('/home');
     })
     .catch(error => {
       console.log('error', error);
@@ -25,25 +20,35 @@ const login = auth => dispatch => {
     });
 };
 
-const confirmCode = (confirmationResult, confirmationCode) => dispatch => {
-  alert(JSON.stringify(confirmationResult));
+const confirmCode = (
+  confirmationResult,
+  confirmationCode,
+  props,
+) => dispatch => {
   confirmationResult
     .confirm(confirmationCode)
     .then(user => {
-      alert(JSON.stringify(user));
-      //   dispatch({type: authConstants.LOGIN_SUCCESS, payload: user});
-      // console.log('user', data);
-      // localStorage.setItem('_token', data.user.refreshToken);
-      // localStorage.setItem('_userData', JSON.stringify(data.user));
-      // dispatch({type: authConstants.LOGIN_SUCCESS, payload: data.user});
-      // history.push('/home');
+      console.log(user);
+      storeData(JSON.stringify(user._user));
+      // alert(JSON.stringify(user));
+      dispatch({type: authConstants.LOGIN_SUCCESS, payload: user._user});
+      props.navigation.navigate('App');
     })
     .catch(error => {
+      console.log(error);
       const errors = [];
       errors.push(error.message);
-      alert(JSON.stringify(errors));
+      // alert(JSON.stringify(errors));
       dispatch({type: authConstants.LOGIN_FAILURE, payload: errors});
     });
+};
+
+const storeData = async user => {
+  try {
+    await AsyncStorage.setItem('_user', user);
+  } catch (error) {
+    // Error saving data
+  }
 };
 
 export const authActions = {
