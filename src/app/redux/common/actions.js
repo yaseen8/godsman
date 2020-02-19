@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react';
 import {DrawerActions} from 'react-navigation-drawer';
 
 
+
 const toggleSideBar = props => dispatch => {
   alert(JSON.stringify(props));
   // dispatch({type: commonConstants.TOGGLE_SIDEBAR});

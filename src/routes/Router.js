@@ -2,15 +2,20 @@ import * as React from 'react';
 import {createAppContainer, createSwitchNavigator} from 'react-navigation';
 import {createStackNavigator} from 'react-navigation-stack';
 import {createDrawerNavigator} from 'react-navigation-drawer';
-import {Dimensions} from 'react-native';
+import {
+  Dimensions,
+  Text
+} from 'react-native';
 import SignIn from '../app/screens/SignIn';
 import Home from '../app/screens/Home';
-import TopLeft from '../app/components/TopLeft';
+import MyBooking from "../app/screens/MyBooking/MyBooking";
 import SideNav from '../app/components/SideNav';
+import DateTime from "../app/screens/DateTime"
 
 const AuthRoute = createStackNavigator(
   {
     SignIn: {screen: SignIn},
+    DateTime: {screen: DateTime}
   },
   {
     initialRouteName: 'SignIn',
@@ -20,12 +25,19 @@ const AuthRoute = createStackNavigator(
 const DEVICE_WIDTH = Dimensions.get('window').width;
 const AppRoute = createDrawerNavigator(
   {
-    Home: {screen: Home},
+    Home: {
+        screen: Home,
+    },
+    MyBooking: {
+        screen: MyBooking,
+    },
   },
   {
+    drawerWidth: 335,
     initialRouteName: 'Home',
     contentComponent: SideNav,
   },
+  
 );
 
 const MainNavigation = createSwitchNavigator(
@@ -34,7 +46,7 @@ const MainNavigation = createSwitchNavigator(
     App: AppRoute,
   },
   {
-    initialRouteName: 'Auth',
+    initialRouteName: 'App',
   },
 );
 
