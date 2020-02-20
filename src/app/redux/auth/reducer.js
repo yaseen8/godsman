@@ -7,6 +7,7 @@ const initialState = {
   user: null,
   loggingIn: false,
   errors: null,
+  confirmationResult: null,
 };
 // ? {loggedIn: true, user: loggedInUser}
 // : {loggedIn: false, user: null, loggingIn: false, errors: null};
@@ -19,6 +20,15 @@ const auth = (state = initialState, action) => {
         user: {},
         loggedIn: false,
         loggingIn: true,
+        errors: null,
+        confirmationResult: {},
+      };
+    case authConstants.CODE_RECEIVED:
+      return {
+        ...state,
+        loggedIn: false,
+        loggingIn: true,
+        confirmationResult: action.payload,
         errors: null,
       };
     case authConstants.LOGIN_SUCCESS:

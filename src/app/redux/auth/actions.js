@@ -4,21 +4,17 @@ import firebase from 'react-native-firebase';
 
 const login = auth => dispatch => {
   dispatch({type: authConstants.LOGIN_REQUEST});
-    // const appVerifier = window.recaptchaVerifier;
+  // const appVerifier = window.recaptchaVerifier;
   firebase
     .auth()
     .signInWithPhoneNumber(auth.number)
     .then(data => {
+      dispatch({type: authConstants.CODE_RECEIVED, payload: data});
       // alert(JSON.stringify(data));
-      firebase.auth().onAuthStateChanged(response => {
-        if (response) {
-          alert(JSON.stringify(response));
-        }
-      })
       // console.log('user', data);
       // localStorage.setItem('_token', data.user.refreshToken);
       // localStorage.setItem('_userData', JSON.stringify(data.user));
-      dispatch({type: authConstants.LOGIN_SUCCESS, payload: data.user});
+      // dispatch({type: authConstants.LOGIN_SUCCESS, payload: data.user});
       // history.push('/home');
     })
     .catch(error => {
@@ -29,6 +25,28 @@ const login = auth => dispatch => {
     });
 };
 
+const confirmCode = (confirmationResult, confirmationCode) => dispatch => {
+  alert(JSON.stringify(confirmationResult));
+  confirmationResult
+    .confirm(confirmationCode)
+    .then(user => {
+      alert(JSON.stringify(user));
+      //   dispatch({type: authConstants.LOGIN_SUCCESS, payload: user});
+      // console.log('user', data);
+      // localStorage.setItem('_token', data.user.refreshToken);
+      // localStorage.setItem('_userData', JSON.stringify(data.user));
+      // dispatch({type: authConstants.LOGIN_SUCCESS, payload: data.user});
+      // history.push('/home');
+    })
+    .catch(error => {
+      const errors = [];
+      errors.push(error.message);
+      alert(JSON.stringify(errors));
+      dispatch({type: authConstants.LOGIN_FAILURE, payload: errors});
+    });
+};
+
 export const authActions = {
   login,
-};
+  confirmCode,
+}; // const appVerifier = window.recaptchaVerifier;
