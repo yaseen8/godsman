@@ -6,30 +6,21 @@ import {DrawerActions} from 'react-navigation-drawer';
 
 
 const toggleSideBar = props => dispatch => {
-  alert(JSON.stringify(props));
+  console.log('action----', props);
+  
   // dispatch({type: commonConstants.TOGGLE_SIDEBAR});
   props.navigation.dispatch(DrawerActions.openDrawer());
 };
 
-// const logout = history => dispatch => {
-//   dispatch({type: commonConstants.LOGOUT_REQUEST});
-//   firebase
-//     .auth()
-//     .signOut()
-//     .then(data => {
-//       localStorage.clear();
-//       dispatch({type: commonConstants.LOGOUT_SUCCESS, payload: {}});
-//       history.push('/login');
-//     })
-//     .catch(error => {
-//       console.log('error', error);
-//       const errors = [];
-//       errors.push(error.message);
-//       dispatch({type: commonConstants.LOGIN_FAILURE, payload: errors});
-//     });
-// };
+const closeSideBar = props => dispatch => {
+  console.log('action 222----', props);
+  
+  // dispatch({type: commonConstants.TOGGLE_SIDEBAR});
+  props.navigation.dispatch(DrawerActions.closeDrawer());
+};
 
 export const commonActions = {
   toggleSideBar,
+  closeSideBar
   // logout,
 };

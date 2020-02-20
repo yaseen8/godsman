@@ -16,77 +16,73 @@ import HomeIcon1 from "../../assets/images/slide-icon1.png"
 import HomeIcon2 from "../../assets/images/slide-icon2.png"
 import HomeIcon3 from "../../assets/images/slide-icon3.png"
 
-const Home = props => {
+const DateTime = props => {
+    
   return (
     <View>
-        <TopHeader  navigation={props.navigation}/>
         <View style={{ height: "100%"}}>
+            <TopHeader  navigation={props.navigation}/>
             <View style={styles.bgTop}>
                 <ImageBackground style={styles.bgPattern} source={BgPattern}>
                     <TouchableOpacity style={styles.positionTitle}>
-                        <Text style={styles.titleText}>What you need</Text>
+                        <Text style={styles.titleText}>When? 21-02-20</Text>
                         <Image style={styles.arrowIcon} source={ArrowIcon} />
                     </TouchableOpacity>
                 </ImageBackground>
-
-                <View style={styles.dropdownApp}>
-                    <ScrollView>
-                        <TouchableOpacity style={styles.dropdownLink}>
-                            <Text style={styles.dropdownText}>I Need Labour</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.dropdownLink}>
-                            <Text style={styles.dropdownText}>I Need Skilled Worker</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.dropdownLink}>
-                            <Text style={styles.dropdownText}>I Need Renovation Work</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.dropdownLink}>
-                            <Text style={styles.dropdownText}>I Need Maintenance Work</Text>
-                        </TouchableOpacity>
-                    </ScrollView>
-                </View>
             </View>
 
             <View style={styles.homeSlide}> 
-                <ScrollView horizontal={true}>
-                    <View style={styles.slideBadges}>
+                <View style={styles.slideBadges}>
+                    <View>
                         <TouchableOpacity style={styles.badgeSelected}>
-                            <Text style={styles.badgeText}>Civil Work</Text>
+                            <Text style={styles.badgeText}>Morning</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.slideBadge}>
-                            <Text style={styles.badgeText}>Electrical</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.slideBadge}>
-                            <Text style={styles.badgeText}>Heating & Cooling</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.slideBadge}>
-                            <Text style={styles.badgeText}>4</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.slideBadge}>
-                            <Text style={styles.badgeText}>5</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.slideBadge}>
-                            <Text style={styles.badgeText}>6</Text>
-                        </TouchableOpacity>
+                        <View style={[styles.timeBadges, {display: "flex"}]}>
+                            <TouchableOpacity style={styles.slideBadge}>
+                                <Text style={styles.badgeText}>09:00 AM</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.selectedTimeBadge}>
+                                <Text style={styles.badgeTextSelected}>10:00 AM</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.slideBadge}>
+                                <Text style={styles.badgeText}>11:00 AM</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </ScrollView>
-
-                <ScrollView horizontal={true}>
-                    <View style={styles.slideBoxes}>
-                        <TouchableOpacity style={styles.iconBox}>
-                            <Image style={styles.slideIcon} source={HomeIcon1} />
-                            <Text style={styles.slideText}>Walls, Extension Renovation</Text>
+                    <View>
+                        <TouchableOpacity style={styles.slideBadge}>
+                            <Text style={styles.badgeText}>Afternoon</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity style={styles.iconBoxSelected}>
-                            <Image style={styles.slideIcon} source={HomeIcon2} />
-                            <Text style={styles.slideText}>Doors, Windows Gate etc</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={styles.iconBox}>
-                            <Image style={styles.slideIcon} source={HomeIcon3} />
-                            <Text style={styles.slideText}>Lawn, Guarden</Text>
-                        </TouchableOpacity>
+                        <View style={styles.timeBadges}>
+                            <TouchableOpacity style={styles.slideBadge}>
+                                <Text style={styles.badgeText}>09:00 AM</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.selectedTimeBadge}>
+                                <Text style={styles.badgeTextSelected}>10:00 AM</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.slideBadge}>
+                                <Text style={styles.badgeText}>11:00 AM</Text>
+                            </TouchableOpacity>
+                        </View>
                     </View>
-                </ScrollView>
+                    <View>
+                        <TouchableOpacity style={styles.slideBadge}>
+                            <Text style={styles.badgeText}>Evening</Text>
+                        </TouchableOpacity>
+                        <View style={styles.timeBadges}>
+                            <TouchableOpacity style={styles.slideBadge}>
+                                <Text style={styles.badgeText}>09:00 AM</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.selectedTimeBadge}>
+                                <Text style={styles.badgeTextSelected}>10:00 AM</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity style={styles.slideBadge}>
+                                <Text style={styles.badgeText}>11:00 AM</Text>
+                            </TouchableOpacity>
+                        </View>
+                    </View>
+                </View>
+                <Text style={styles.warningText}>Please select date and time of the day from above</Text>
             </View>
 
 
@@ -94,13 +90,13 @@ const Home = props => {
                 <View style={styles.stepsInfo}>
                     <View style={styles.stepCol}>
                         <View style={styles.stepDot}></View>
-                        <Text style={styles.stepText}>Step 1/3</Text>
+                        <Text style={styles.stepText}>Step 2/3</Text>
                     </View>
-                    <Text style={styles.stepDesc}>You will be asked to set preferred date in next step</Text>
+                    <Text style={styles.stepDesc}>You will be ask to set up job location in next step</Text>
                 </View>
                 <TouchableOpacity 
                     style={styles.stepBtn}
-                    onPress={() => props.navigation.navigate("DateTime")}
+                    onPress={() => props.navigation.navigate("Location")}
                 >
                     <Image source={ArrowIcon} style={styles.stepArrow} />
                 </TouchableOpacity>
@@ -110,17 +106,17 @@ const Home = props => {
   );
 };
 
-export default Home;
+export default DateTime;
 
 const styles = StyleSheet.create({
     bgTop: {
-        height: 236
+        height: 236,
+        marginTop: -30
     },
     bgPattern: {
         width: "100%",
         flex: 1,
         position: "relative",
-        zIndex: -1
     },
     positionTitle: {
         position: "absolute",
@@ -156,10 +152,9 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15,
         paddingVertical: 5,
         position: "absolute",
-        top: "75%",
+        bottom: "-50%",
         left: 0,
-        width: "90%",
-        maxHeight: 200,
+        width: "93%",
         display: "none",
         opacity: 0
     },
@@ -179,6 +174,8 @@ const styles = StyleSheet.create({
     },  
     slideBadges: {
         flexDirection: "row",
+        alignItems: "flex-start",
+        marginBottom: 5
     },
     slideBadge: {
         paddingHorizontal: 10,
@@ -189,7 +186,8 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         minWidth: 80,
         alignItems: "center",
-        justifyContent: "center"
+        justifyContent: "center",
+        marginBottom: 13
     },
     badgeSelected: {
         paddingHorizontal: 10,
@@ -201,7 +199,21 @@ const styles = StyleSheet.create({
         minWidth: 80,
         alignItems: "center",
         justifyContent: "center",
-        backgroundColor: "#cde5fd"
+        backgroundColor: "#cde5fd",
+        marginBottom: 13
+    },
+    selectedTimeBadge: {
+        paddingHorizontal: 10,
+        paddingVertical: 5,
+        borderWidth: 1,
+        borderColor: "#f56407",
+        marginRight: 10,
+        borderRadius: 8,
+        minWidth: 80,
+        alignItems: "center",
+        justifyContent: "center",
+        backgroundColor: "#f56407",
+        marginBottom: 13
     },
     badgeText: {
         fontSize: 14,
@@ -209,47 +221,23 @@ const styles = StyleSheet.create({
         color: "#353535",
         fontWeight: "300",
     },
-
-    slideBoxes: {
-        flexDirection: "row",
-        flex: 1,
-        marginTop: 25
-    },
-    iconBox: {
-        width: "25%",
-        backgroundColor: "#fff",
-        elevation: 3,
-        textAlign: "left",
-        padding: 15,
-        borderWidth: 1,
-        borderColor: "#dcdcdc",
-        borderRadius: 10,
-        marginRight: 15
-    },
-    iconBoxSelected: {
-        width: "25%",
-        backgroundColor: "#fff",
-        elevation: 3,
-        textAlign: "left",
-        padding: 15,
-        borderWidth: 1,
-        borderColor: "#f45c04",
-        borderRadius: 10,
-        marginRight: 15,
-        borderLeftColor: "#f45c04",
-        borderRightColor: "#fdb924"
-    },
-    slideIcon: {
-        // width: 53,
-        // height: 47,
-        marginBottom: 10
-    },
-    slideText: {
+    badgeTextSelected: {
         fontSize: 14,
-        lineHeight: 16,
-        color: "#000",
-        fontWeight: "300"
+        lineHeight: 17,
+        color: "#fff",
+        fontWeight: "300",
     },
+    timeBadges: {
+        display: "none"
+    },
+
+    warningText: {
+        fontSize: 15,
+        lineHeight: 17,
+        color: "#f68048"
+    },
+
+
     stepsFooter: {
         flexDirection: "row",
         justifyContent: "space-between",
@@ -303,8 +291,6 @@ const styles = StyleSheet.create({
         backgroundColor: "#f88613"
     },
     stepArrow: {
-        // width: 30,
-        // height: 25,
         transform: [{ rotate: '-90deg'}],
         marginLeft: 6
     }

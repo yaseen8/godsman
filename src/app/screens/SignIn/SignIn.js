@@ -32,8 +32,6 @@ const SignIn = props => {
             <ImageBackground style={styles.bgPattern} source={BgPattern}>
                 <Text style={styles.titleText}>Let's get start</Text>
             </ImageBackground>
-            {/* <Image style={styles.logInImg} source={BgPattern} />
-            <Text style={styles.bgText}>Let's get start</Text> */}
         </View>
         <View style={styles.container}>
             <View style={styles.loginWrap}>
@@ -48,7 +46,10 @@ const SignIn = props => {
                         onChangeText={e => setAuth({...auth, number: e})}
                         placeholder="Enter verification code" 
                     />
-                    <TouchableOpacity style={styles.logBtn}>
+                    <TouchableOpacity 
+                        style={styles.logBtn}
+                        onPress={() => props.navigation.navigate("Home")}
+                    >
                         <Text style={styles.btnText}>Next</Text>
                     </TouchableOpacity>
                 </View>
@@ -79,6 +80,11 @@ const styles = StyleSheet.create({
         flex: 1,
         width: "100%",
         height: "100%"
+    },
+    positionLogo: {
+        position: "absolute",
+        left: 0,
+        top: 30
     },
     titleText: {
         position: "absolute",

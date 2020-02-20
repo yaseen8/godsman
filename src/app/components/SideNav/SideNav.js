@@ -12,19 +12,25 @@ import { notifications } from 'react-native-firebase';
 
 import MenuBtn from "../../assets/images/menu-btn.png"
 import NotificationIcon from "../../assets/images/bell-icon.png"
-import SmallLogo from "../../assets/images/logo-small.png"
+import SmallLogo from "../../assets/images/logo-sidebar.png"
+import {commonActions} from '../../redux/common/actions';
+import {connect} from 'react-redux';
 
 const SideNav = props => {
   // alert(JSON.stringify(props));
-	console.log("ddd", props);
-	
+	const {closeSideBar} = props;
+
+	const closeDrawer = () => {
+		console.log('sdsdsd');
+		closeSideBar(props);
+	}
 
   return (
     <View style={{flex: 1,}}>
       {/*<Header />*/}
       <View style={styles.userWrap}>
 		<View style={styles.drawerHead}>
-			<TouchableOpacity style={styles.drawerBtn}>
+			<TouchableOpacity style={styles.drawerBtn} onPress={()=>closeDrawer()}>
 				<Image style={styles.drawerBtnImg} source={MenuBtn} />
 			</TouchableOpacity>
 			<TouchableOpacity style={styles.notificationBtn}>
@@ -57,7 +63,22 @@ const SideNav = props => {
   );
 };
 
-export default SideNav;
+const mapStateToProps = state => {
+	const {openSidebar} = state.common;
+	return {openSidebar};
+  };
+  
+  const mapDispatchToProps = {
+	closeSideBar: commonActions.closeSideBar,
+  };
+  
+  const connectedTopHeader = connect(
+	mapStateToProps,
+	mapDispatchToProps,
+  )(SideNav);
+  
+  export {connectedTopHeader as SideNav};
+
 
 const styles = StyleSheet.create({
 	userWrap: {
