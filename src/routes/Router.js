@@ -17,8 +17,9 @@ import DateTime from "../app/screens/DateTime";
 import Location from "../app/screens/Location";
 import BookingComplete from "../app/screens/BookingComplete";
 import CallUs from "../app/screens/CallUs";
-import TopHeader from '../app/components/Header'
-import MenuBtn from "../app/assets/images/menu-btn.png"
+import TopHeader from '../app/components/Header';
+import MenuBtn from "../app/assets/images/menu-btn.png";
+import SplashScreen from "../app/screens/SplashScreen";
 
 const AuthRoute = createStackNavigator(
   {
@@ -36,10 +37,21 @@ const AuthRoute = createStackNavigator(
     },
     CallUs: {
       screen: CallUs
-    }
+    },
+    SplashScreen: {
+      screen: SplashScreen
+    },
+
+    // Drawer Screens
+    Home: {
+        screen: Home,
+    },
+    MyBooking: {
+        screen: MyBooking,
+    },
   },
   {
-    initialRouteName: 'SignIn',
+    // initialRouteName: 'SplashScreen',
     headerMode: 'none',
   },
 );
@@ -55,7 +67,7 @@ const AppRoute = createDrawerNavigator(
   },
   {
     drawerWidth: 335,
-    initialRouteName: 'Home',
+    initialRouteName: null,
     contentComponent: SideNav,
   },
   
@@ -67,7 +79,7 @@ const MainNavigation = createSwitchNavigator(
     App: AppRoute,
   },
   {
-    initialRouteName: 'Auth',
+    initialRouteName: 'App',
   },
 );
 

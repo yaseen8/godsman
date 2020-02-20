@@ -17,7 +17,7 @@ const CallUs = props => {
   return (
     <View>
         <View style={{ height: "100%"}}>
-            <TopHeader  navigation={props.navigation}/>
+            <TopHeader  navigation={props.navigation} callUs={true}/>
             <View style={styles.bgTop}>
                 <ImageBackground style={styles.bgPattern} source={BgPattern}>
                     <View style={styles.positionTitle}>

@@ -18,7 +18,6 @@ import {DrawerActions} from 'react-navigation-drawer';
 
 
 const TopHeader = (props) => {
-   console.log('letseiiii', props);
    
   const {toggleSideBar} = props;
   const openDrawer = () => {

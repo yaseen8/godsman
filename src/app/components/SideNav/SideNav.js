@@ -53,6 +53,15 @@ const SideNav = props => {
 		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("MyBooking")}>
 			  <Text  style={styles.navLinkText}>My Booking</Text>
 		  </TouchableOpacity>
+		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("About")}>
+			  <Text  style={styles.navLinkText}>About</Text>
+		  </TouchableOpacity>
+		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("Works")}>
+			  <Text  style={styles.navLinkText}>How it Works</Text>
+		  </TouchableOpacity>
+		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("SignIn")}>
+			  <Text  style={styles.navLinkText}>Sign Out</Text>
+		  </TouchableOpacity>
 	  </View>
 
 	  <View style={styles.drawerFooter}>
@@ -139,10 +148,10 @@ const styles = StyleSheet.create({
 		marginTop: 15
 	},
 	navLinkText: {
-		fontSize: 18,
+		fontSize: 20,
 		lineHeight: 20,
 		color: "#000",
-		paddingVertical: 10
+		paddingVertical: 13
 	},
 
 	drawerFooter: {
@@ -157,6 +166,5 @@ const styles = StyleSheet.create({
 		fontSize: 14,
 		lineHeight: 18,
 		color: "#000",
-		marginTop: 12
 	},
 });
