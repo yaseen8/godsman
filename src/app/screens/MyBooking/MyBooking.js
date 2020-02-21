@@ -34,13 +34,13 @@ const MyBooking = props => {
                 <View style={styles.container}>
                     <View style={styles.bookingContent}>
                         <View style={styles.bookingCol}>
-                            <BookingCard />
+                            <BookingCard navigation={props.navigation} />
                         </View>
                         <View style={styles.bookingCol}>
-                            <BookingCard />
+                            <BookingCard navigation={props.navigation} />
                         </View>
                         <View style={styles.bookingCol}>
-                            <BookingCard />
+                            <BookingCard navigation={props.navigation} />
                         </View>
                     </View>
                 </View>
@@ -79,7 +79,8 @@ const styles = StyleSheet.create({
         borderBottomColor: "#fff",
         borderBottomWidth: 1,
         width: "auto",
-        marginBottom: 12
+        marginBottom: 12,
+        paddingRight: 10
     },
     bookingInfoTitle: {
         fontSize: 16,

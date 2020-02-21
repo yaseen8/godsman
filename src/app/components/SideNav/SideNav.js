@@ -4,7 +4,8 @@ import {
 	TouchableOpacity, 
 	View,
 	StyleSheet,
-	Image
+	Image,
+	ScrollView
 } from 'react-native';
 import {DrawerNavigatorItems} from 'react-navigation-drawer';
 import Header from '../Header';
@@ -27,43 +28,43 @@ const SideNav = props => {
 
   return (
     <View style={{flex: 1,}}>
-      {/*<Header />*/}
-      <View style={styles.userWrap}>
-		<View style={styles.drawerHead}>
-			<TouchableOpacity style={styles.drawerBtn} onPress={()=>closeDrawer()}>
-				<Image style={styles.drawerBtnImg} source={MenuBtn} />
+	<ScrollView>
+		<View style={styles.userWrap}>
+			<View style={styles.drawerHead}>
+				<TouchableOpacity style={styles.drawerBtn} onPress={()=>closeDrawer()}>
+					<Image style={styles.drawerBtnImg} source={MenuBtn} />
+				</TouchableOpacity>
+				<TouchableOpacity style={styles.notificationBtn}>
+					<View style={styles.notificationDot}></View>
+					<Image style={styles.notificationBtnImg} source={NotificationIcon} />
+				</TouchableOpacity>
+			</View>
+
+			<View style={styles.userInfo}>
+				<Text style={styles.userText}>Hi Usman!</Text>
+				<Text style={styles.userDesc}>How are you doing</Text>
+				<Text style={styles.userDesc}>Today</Text>
+			</View>
+		</View>
+		<View style={styles.menuWrap}>
+			{/* <DrawerNavigatorItems style={{fontSize: 30, color: "red"}} {...props} /> */}
+			<TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("Home")}>
+				<Text  style={styles.navLinkText}>Start</Text>
 			</TouchableOpacity>
-			<TouchableOpacity style={styles.notificationBtn}>
-				<View style={styles.notificationDot}></View>
-				<Image style={styles.notificationBtnImg} source={NotificationIcon} />
+			<TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("MyBooking")}>
+				<Text  style={styles.navLinkText}>My Booking</Text>
+			</TouchableOpacity>
+			<TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("AboutUs")}>
+				<Text  style={styles.navLinkText}>About</Text>
+			</TouchableOpacity>
+			<TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("HowItWorks")}>
+				<Text  style={styles.navLinkText}>How it Works</Text>
+			</TouchableOpacity>
+			<TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("SignOut")}>
+				<Text  style={styles.navLinkText}>Sign Out</Text>
 			</TouchableOpacity>
 		</View>
-
-		<View style={styles.userInfo}>
-			<Text style={styles.userText}>Hi Usman!</Text>
-			<Text style={styles.userDesc}>How are you doing</Text>
-			<Text style={styles.userDesc}>Today</Text>
-		</View>
-	  </View>
-	  <View style={styles.menuWrap}>
-      	{/* <DrawerNavigatorItems style={{fontSize: 30, color: "red"}} {...props} /> */}
-		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("Home")}>
-			  <Text  style={styles.navLinkText}>Start</Text>
-		  </TouchableOpacity>
-		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("MyBooking")}>
-			  <Text  style={styles.navLinkText}>My Booking</Text>
-		  </TouchableOpacity>
-		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("About")}>
-			  <Text  style={styles.navLinkText}>About</Text>
-		  </TouchableOpacity>
-		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("Works")}>
-			  <Text  style={styles.navLinkText}>How it Works</Text>
-		  </TouchableOpacity>
-		  <TouchableOpacity style={styles.navLink} onPress={()=>props.navigation.navigate("SignIn")}>
-			  <Text  style={styles.navLinkText}>Sign Out</Text>
-		  </TouchableOpacity>
-	  </View>
-
+	  </ScrollView>
 	  <View style={styles.drawerFooter}>
 		  <Image style={styles.footerLogo} source={SmallLogo} />
 		  <Text style={styles.copyrightText}>Copyright 2020</Text>

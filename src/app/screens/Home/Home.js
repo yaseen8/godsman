@@ -16,9 +16,12 @@ import HomeIcon1 from "../../assets/images/slide-icon1.png"
 import HomeIcon2 from "../../assets/images/slide-icon2.png"
 import HomeIcon3 from "../../assets/images/slide-icon3.png"
 
+import SignOut from "../../components/SignOut";
+
 const Home = props => {
   return (
     <View>
+        {/* <SignOut /> */}
         <TopHeader  navigation={props.navigation}/>
         <View style={{ height: "100%"}}>
             <View style={styles.bgTop}>
@@ -48,7 +51,7 @@ const Home = props => {
             </View>
 
             <View style={styles.homeSlide}> 
-                <ScrollView horizontal={true}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     <View style={styles.slideBadges}>
                         <TouchableOpacity style={styles.badgeSelected}>
                             <Text style={styles.badgeText}>Civil Work</Text>
@@ -71,7 +74,7 @@ const Home = props => {
                     </View>
                 </ScrollView>
 
-                <ScrollView horizontal={true}>
+                <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                     <View style={styles.slideBoxes}>
                         <TouchableOpacity style={styles.iconBox}>
                             <Image style={styles.slideIcon} source={HomeIcon1} />
@@ -114,7 +117,9 @@ export default Home;
 
 const styles = StyleSheet.create({
     bgTop: {
-        height: 236
+        height: 236,
+        position: "relative",
+        zIndex: -1,
     },
     bgPattern: {
         width: "100%",
@@ -224,7 +229,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: "#dcdcdc",
         borderRadius: 10,
-        marginRight: 15
+        marginRight: 15,
     },
     iconBoxSelected: {
         width: "25%",

@@ -102,5 +102,5 @@ const styles = StyleSheet.create({
         lineHeight: 17,
         color: '#6f6f6f',
         textAlign: "center"
-    }    
+    }
 });

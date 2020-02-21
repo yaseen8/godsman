@@ -20,6 +20,9 @@ import CallUs from "../app/screens/CallUs";
 import TopHeader from '../app/components/Header';
 import MenuBtn from "../app/assets/images/menu-btn.png";
 import SplashScreen from "../app/screens/SplashScreen";
+import JobDetail from "../app/screens/JobDetail/JobDetail";
+import AboutUs from "../app/screens/AboutUs/AboutUs";
+import HowItWorks from "../app/screens/HowItWorks/HowItWorks"
 
 const AuthRoute = createStackNavigator(
   {
@@ -41,6 +44,9 @@ const AuthRoute = createStackNavigator(
     SplashScreen: {
       screen: SplashScreen
     },
+    JobDetail: {
+      screen: JobDetail
+    },
 
     // Drawer Screens
     Home: {
@@ -49,6 +55,12 @@ const AuthRoute = createStackNavigator(
     MyBooking: {
         screen: MyBooking,
     },
+    AboutUs: {
+      screen: AboutUs
+    },
+    HowItWorks: {
+      screen: HowItWorks
+    }
   },
   {
     // initialRouteName: 'SplashScreen',
@@ -64,6 +76,12 @@ const AppRoute = createDrawerNavigator(
     MyBooking: {
         screen: MyBooking,
     },
+    AboutUs: {
+      screen: AboutUs
+    },
+    HowItWorks: {
+      screen: HowItWorks
+    }
   },
   {
     drawerWidth: 335,

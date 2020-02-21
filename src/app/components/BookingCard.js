@@ -12,14 +12,16 @@ import {
 const BookingCard = props => {
   return (
     <View style={styles.bookingCard}>
-        <View style={styles.cardRow}>
-            <View style={styles.stepDot}></View>
-            <View style={styles.cardInfo}>
-                <Text style={styles.cardTitle}>Civil - Window, Door Renovation</Text>
-                <Text style={styles.cardProgress}>Status: In Progress</Text>
-                <Text style={styles.cardDate}>22-02-2020 10:04:54 AM</Text>
+        <TouchableOpacity onPress={()=> props.navigation.navigate("JobDetail")}>
+            <View style={styles.cardRow}>
+                <View style={styles.stepDot}></View>
+                <View style={styles.cardInfo}>
+                    <Text style={styles.cardTitle}>Civil - Window, Door Renovation</Text>
+                    <Text style={styles.cardProgress}>Status: In Progress</Text>
+                    <Text style={styles.cardDate}>22-02-2020 10:04:54 AM</Text>
+                </View>
             </View>
-        </View>
+        </TouchableOpacity>
     </View>
   );
 };
@@ -31,7 +33,7 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 8,
         borderWidth: 2,
-        borderColor: "#ccc"
+        borderColor: "#ccc",
     },
     stepDot: {
         width: 14,
@@ -40,22 +42,22 @@ const styles = StyleSheet.create({
         backgroundColor: '#ffcd28',
         borderWidth: 1,
         borderColor: "#989487",
-        marginRight: 20
+        marginRight: 15
     },
     cardRow: {
         flexDirection: "row"
     }, 
     cardTitle: {
-        fontSize: 20,
+        fontSize: 18,
         color: "#000000",
-        lineHeight: 24,
+        lineHeight: 20,
         marginBottom: 5,
         fontWeight: "700"
     },
     cardProgress: {
-        fontSize: 20,
+        fontSize: 18,
         color: "#000000",
-        lineHeight: 26,
+        lineHeight: 20,
         marginBottom: 5,
         fontWeight: "300"
     },
