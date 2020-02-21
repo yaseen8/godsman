@@ -88,7 +88,7 @@ const AppRoute = createDrawerNavigator(
     initialRouteName: null,
     contentComponent: SideNav,
   },
-  
+
 );
 
 const MainNavigation = createSwitchNavigator(
