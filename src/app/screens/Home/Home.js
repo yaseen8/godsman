@@ -37,6 +37,9 @@ const Home = props => {
     getTypes();
     console.log('types', types);
   }
+  const goToDateTime = () => {
+    props.navigation.navigate('DateTime');
+  }
   return (
     <View>
       <View style={{height: '100%'}}>
@@ -120,9 +123,7 @@ const Home = props => {
               You will be asked to set preferred date in next step
             </Text>
           </View>
-          <TouchableOpacity
-            style={styles.stepBtn}
-            onPress={() => props.navigation.navigate('DateTime')}>
+          <TouchableOpacity style={styles.stepBtn} onPress={goToDateTime}>
             <Image source={ArrowIcon} style={styles.stepArrow} />
           </TouchableOpacity>
         </View>
@@ -176,10 +177,10 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#fff',
   },
-  // arrowIcon: {
-  //     width: 30,
-  //     height: 20
-  // },
+  arrowIcon: {
+      width: 30,
+      height: 20
+  },
 
   dropdownApp: {
     backgroundColor: '#fff',
@@ -337,8 +338,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#f88613',
   },
   stepArrow: {
-    // width: 30,
-    // height: 25,
+    width: 30,
+    height: 25,
     transform: [{rotate: '-90deg'}],
     marginLeft: 6,
   },
