@@ -15,17 +15,26 @@ import ArrowIcon from '../../assets/images/arrow-icon.png';
 import HomeIcon1 from '../../assets/images/slide-icon1.png';
 import HomeIcon2 from '../../assets/images/slide-icon2.png';
 import HomeIcon3 from '../../assets/images/slide-icon3.png';
+import {connect} from 'react-redux';
+import {servicesAction} from '../../redux/services/actions';
 
 const Home = props => {
   let [showDropDown, setDropDown] = useState(false);
+  const {getTypes, types} = props;
+  useEffect(() => {
+    // getAllTypes();
+  })
   const showService = () => {
     if (showDropDown) {
       setDropDown(false);
     } else {
       setDropDown(true);
     }
-    console.log(showDropDown);
   };
+  const getAllTypes = () => {
+    getTypes();
+    console.log('types', types);
+  }
   return (
     <View>
       <View style={{height: '100%'}}>
@@ -120,7 +129,22 @@ const Home = props => {
   );
 };
 
-export default Home;
+const mapStateToProps = state => {
+  const {types, categories, services} = state.services;
+  return {types, categories, services};
+};
+
+const mapDispatchToProps = {
+  getTypes: servicesAction.getTypes,
+  getCategories: servicesAction.getCategories,
+};
+
+const connectedHomePage = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Home);
+
+export {connectedHomePage as Home};
 
 const styles = StyleSheet.create({
   bgTop: {

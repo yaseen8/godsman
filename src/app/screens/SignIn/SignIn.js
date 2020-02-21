@@ -84,6 +84,23 @@ const SignIn = props => {
   );
 };
 
+const mapStateToProps = state => {
+  const {loggingIn, errors, loggedIn, confirmationResult} = state.auth;
+  return {loggingIn, errors, loggedIn, confirmationResult};
+};
+
+const mapDispatchToProps = {
+  login: authActions.login,
+  confirmCode: authActions.confirmCode,
+};
+
+const connectedSignInPage = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(SignIn);
+
+export {connectedSignInPage as SignIn};
+
 const styles = StyleSheet.create({
   signIn_wrap: {
     flex: 1,
@@ -150,20 +167,3 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
 });
-
-const mapStateToProps = state => {
-  const {loggingIn, errors, loggedIn, confirmationResult} = state.auth;
-  return {loggingIn, errors, loggedIn, confirmationResult};
-};
-
-const mapDispatchToProps = {
-  login: authActions.login,
-  confirmCode: authActions.confirmCode,
-};
-
-const connectedSignInPage = connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(SignIn);
-
-export {connectedSignInPage as SignIn};
