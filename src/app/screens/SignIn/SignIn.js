@@ -47,8 +47,6 @@ const SignIn = props => {
         <ImageBackground style={styles.bgPattern} source={BgPattern}>
           <Text style={styles.titleText}>Let's get start</Text>
         </ImageBackground>
-        {/* <Image style={styles.logInImg} source={BgPattern} />
-            <Text style={styles.bgText}>Let's get start</Text> */}
       </View>
       <View style={styles.container}>
         <View style={styles.loginWrap}>

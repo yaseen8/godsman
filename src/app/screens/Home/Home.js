@@ -18,6 +18,8 @@ import HomeIcon3 from '../../assets/images/slide-icon3.png';
 import {connect} from 'react-redux';
 import {servicesAction} from '../../redux/services/actions';
 
+import SignOut from "../../components/SignOut";
+
 const Home = props => {
   let [showDropDown, setDropDown] = useState(false);
   const {getTypes, types} = props;
