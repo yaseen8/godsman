@@ -1,4 +1,4 @@
-package com.godsman;
+package com.godsman.app;
 
 import com.facebook.react.ReactActivity;
 

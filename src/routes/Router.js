@@ -90,7 +90,7 @@ const MainNavigation = createSwitchNavigator(
     App: AppRoute,
   },
   {
-    initialRouteName: 'App',
+    initialRouteName: 'Auth',
   },
 );
 
