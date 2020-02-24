@@ -1,23 +1,23 @@
 import {bookingConstants} from './constants';
 import firebase from 'react-native-firebase';
 
-const selectedService = service => dispatch => {
-  const bookingObject = {};
-  bookingObject.service = service;
-  dispatch({type: bookingConstants.BOOKING_DATA, payload: bookingObject});
+const selectedServiceData = bookingData => dispatch => {
+  dispatch({type: bookingConstants.BOOKING_DATA, payload: bookingData});
 };
-
-const selectedBookingDate = (selectedService, date) => dispatch => {
-  selectedService.date = date;
-  dispatch({type: bookingConstants.BOOKING_DATA, payload: selectedService});
-};
-const selectedBookingTime = (selectedService, time) => dispatch => {
-  selectedService.time = time;
-  dispatch({type: bookingConstants.BOOKING_DATA, payload: selectedService});
+const bookService = bookingData => dispatch => {
+  dispatch({type: bookingConstants.BOOKING_REQUEST});
+  bookingData.timestamp = new Date();
+  firebase
+    .firestore()
+    .collection('booking')
+    .add(bookingData)
+    .then(resp => {
+      console.log(resp);
+    })
+    .catch(error => console.log(error));
 };
 
 export const bookingActions = {
-  selectedService,
-  selectedBookingDate,
-  selectedBookingTime,
+  selectedServiceData,
+  bookService,
 };

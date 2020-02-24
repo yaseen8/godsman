@@ -16,7 +16,7 @@ import {bookingActions} from '../../redux/booking/actions';
 import {connect} from 'react-redux';
 
 const DateTime = props => {
-  const {bookingData, selectedBookingDate, selectedBookingTime} = props;
+  const {bookingData, selectedServiceData} = props;
   const [currentDate, setCurrentDate] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
   const [show, setShow] = useState(false);
@@ -47,12 +47,13 @@ const DateTime = props => {
     }
   };
   const selectedData = date => {
+    console.log('asdasd', bookingData);
     if (date < currentDate) {
       alert('Please select future dates');
       return;
     }
-    // alert(date);
-    selectedBookingDate(bookingData, date);
+    bookingData.date = date;
+    selectedServiceData(bookingData);
   };
   const morningTime = () => {
     setAfternoon(false);
@@ -83,7 +84,8 @@ const DateTime = props => {
   };
   const selectBookingTime = time => {
     setSelectedTime(time);
-    selectedBookingTime(bookingData, time);
+    bookingData.time = time;
+    selectedServiceData(bookingData);
   };
   const location = () => {
     if (!bookingData.date || !bookingData.time) {
@@ -332,9 +334,7 @@ const mapStateToProps = state => {
 };
 
 const mapDispatchToProps = {
-  selectedService: bookingActions.selectedService,
-  selectedBookingDate: bookingActions.selectedBookingDate,
-  selectedBookingTime: bookingActions.selectedBookingTime,
+  selectedServiceData: bookingActions.selectedServiceData,
 };
 
 const connectedDateTimePage = connect(

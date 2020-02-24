@@ -9,15 +9,13 @@ import {
   ScrollView,
 } from 'react-native';
 import TopHeader from '../../components/Header';
-import {Container, Content} from 'native-base';
 import BgPattern from '../../assets/images/bg2.png';
 import ArrowIcon from '../../assets/images/arrow-icon.png';
 import HomeIcon1 from '../../assets/images/slide-icon1.png';
-import HomeIcon2 from '../../assets/images/slide-icon2.png';
-import HomeIcon3 from '../../assets/images/slide-icon3.png';
 import {connect} from 'react-redux';
 import {servicesAction} from '../../redux/services/actions';
 import {bookingActions} from '../../redux/booking/actions';
+import firebase from 'react-native-firebase';
 
 const Home = props => {
   let [showDropDown, setDropDown] = useState(false);
@@ -28,12 +26,23 @@ const Home = props => {
     categories,
     getServices,
     services,
-    selectedService,
+    selectedServiceData,
     bookingData,
   } = props;
   useEffect(() => {
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        if (!bookingData.userId) {
+          bookingData.userId = user._user.uid;
+          bookingData.status = 'PENDING';
+          selectedServiceData(bookingData);
+        }
+      } else {
+        console.log('not logged');
+      }
+    });
     getAllTypes();
-  }, [getAllTypes]);
+  }, []);
   const showService = () => {
     if (showDropDown) {
       setDropDown(false);
@@ -46,8 +55,8 @@ const Home = props => {
     console.log('types', types);
   };
   const goToDateTime = () => {
-    if (!bookingData.service) {
-      alert('Select service')
+    if (!bookingData.serviceID) {
+      alert('Select service');
       return;
     }
     props.navigation.navigate('DateTime');
@@ -60,7 +69,8 @@ const Home = props => {
     getServices(category.id);
   };
   const userSelectedService = service => {
-    selectedService(service.id);
+    bookingData.serviceID = service.id;
+    selectedServiceData(bookingData);
   };
   return (
     <View>
@@ -178,7 +188,7 @@ const mapDispatchToProps = {
   getTypes: servicesAction.getTypes,
   getCategories: servicesAction.getCategories,
   getServices: servicesAction.getServices,
-  selectedService: bookingActions.selectedService,
+  selectedServiceData: bookingActions.selectedServiceData,
 };
 
 const connectedHomePage = connect(

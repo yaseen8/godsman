@@ -16,13 +16,15 @@ import MapImg from '../../assets/images/map-img.png';
 import MapView, {PROVIDER_GOOGLE} from 'react-native-maps'; // remove PROVIDER_GOOGLE import if not using Google Maps
 import Geolocation from 'react-native-geolocation-service';
 import {PermissionsAndroid} from 'react-native';
-import Geocoder from 'react-native-geocoding';
+import {bookingActions} from '../../redux/booking/actions';
+import {connect} from 'react-redux';
 
 const Location = props => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [location, setLocation] = useState('');
   const [mapRegion, setMapRegion] = useState(null);
+  const {bookingData, bookService} = props;
   const [currentLatLong, setCurrentLatLong] = useState({
     latitude: 0,
     longitude: 0,
@@ -55,6 +57,8 @@ const Location = props => {
               longitudeDelta: 0.00421 * 1.5,
             };
             onRegionChange(region);
+            setLatitude(position.coords.latitude);
+            setLongitude(position.coords.longitude);
             fetch(
               'https://maps.googleapis.com/maps/api/geocode/json?address=' +
                 position.coords.latitude +
@@ -69,6 +73,8 @@ const Location = props => {
                   'ADDRESS GEOCODE is BACK!! => ' +
                     JSON.stringify(responseJson),
                 );
+                console.log(responseJson.results[0].formatted_address);
+                setLocation(responseJson.results[0].formatted_address);
               });
             console.log('latitude', latitude);
           },
@@ -91,6 +97,12 @@ const Location = props => {
   };
   const onRegionChange = region => {
     setMapRegion(region);
+  };
+  const bookUserService = () => {
+    bookingData.latitude = latitude;
+    bookingData.longitude = longitude;
+    bookingData.location = location;
+    bookService(bookingData);
   };
   return (
     <View>
@@ -164,9 +176,7 @@ const Location = props => {
             <Text style={styles.stepDesc}>Thats all!</Text>
             <Text style={styles.stepDesc}>Click Next to complete.</Text>
           </View>
-          <TouchableOpacity
-            style={styles.stepBtn}
-            onPress={() => props.navigation.navigate('BookingComplete')}>
+          <TouchableOpacity style={styles.stepBtn} onPress={bookUserService}>
             <Image source={ArrowIcon} style={styles.stepArrow} />
           </TouchableOpacity>
         </View>
@@ -175,7 +185,21 @@ const Location = props => {
   );
 };
 
-export default Location;
+const mapStateToProps = state => {
+  const {bookingData} = state.booking;
+  return {bookingData};
+};
+
+const mapDispatchToProps = {
+  bookService: bookingActions.bookService,
+};
+
+const connectedLocationPage = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(Location);
+
+export {connectedLocationPage as Location};
 
 const styles = StyleSheet.create({
   bgTop: {

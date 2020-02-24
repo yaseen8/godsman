@@ -27,8 +27,7 @@ const getCategories = typeID => dispatch => {
       });
       console.log(categories);
       dispatch({type: servicesConstants.GET_CATEGORIES, payload: categories});
-      dispatch({type: servicesConstants.GET_SERVICES, payload: []});
-      dispatch({type: bookingConstants.BOOKING_DATA, payload: {}});
+
     });
 };
 
