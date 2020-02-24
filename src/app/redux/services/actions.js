@@ -1,35 +1,53 @@
 import {servicesConstants} from './constants';
+import {bookingConstants} from '../booking/constants';
 import firebase from 'react-native-firebase';
 
-const getTypes = dispatch => {
-  // const appVerifier = window.recaptchaVerifier;
+const getTypes = () => dispatch => {
+  const types = [];
   firebase
     .firestore()
     .collection('types')
-    .then(data => {
-      dispatch({type: servicesConstants.GET_TYPES, payload: data});
-    })
-    .catch(error => {
-      console.log('error', error);
-      const errors = [];
-      errors.push(error.message);
+    .onSnapshot(snapshot => {
+      snapshot.forEach(object => {
+        types.push({id: object.id, ...object.data()});
+      });
+      dispatch({type: servicesConstants.GET_TYPES, payload: types});
     });
 };
 
 const getCategories = typeID => dispatch => {
+  const categories = [];
   firebase
     .firestore()
-    .then(categories => {
+    .collection('categories')
+    .where('typeID', '==', typeID)
+    .onSnapshot(snapshot => {
+      snapshot.forEach(object => {
+        categories.push({id: object.id, ...object.data()});
+      });
+      console.log(categories);
       dispatch({type: servicesConstants.GET_CATEGORIES, payload: categories});
-    })
-    .catch(error => {
-      console.log(error);
-      const errors = [];
-      errors.push(error.message);
+      dispatch({type: servicesConstants.GET_SERVICES, payload: []});
+      dispatch({type: bookingConstants.BOOKING_DATA, payload: {}});
+    });
+};
+
+const getServices = categoryID => dispatch => {
+  const services = [];
+  firebase
+    .firestore()
+    .collection('services')
+    .where('categoryID', '==', categoryID)
+    .onSnapshot(snapshot => {
+      snapshot.forEach(object => {
+        services.push({id: object.id, ...object.data()});
+      });
+      dispatch({type: servicesConstants.GET_SERVICES, payload: services});
     });
 };
 
 export const servicesAction = {
   getTypes,
   getCategories,
+  getServices,
 };

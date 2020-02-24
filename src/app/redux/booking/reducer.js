@@ -1,54 +1,41 @@
-import {authConstants} from './constants';
-// let auth = null;
-
-// const loggedInUser = JSON.parse(localStorage.getItem('_userData'));
+import {bookingConstants} from './constants';
 const initialState = {
-  loggedIn: false,
-  user: null,
-  loggingIn: false,
-  errors: null,
-  confirmationResult: null,
+  bookingStart: false,
+  bookingData: {},
+  bookingResponse: {},
+  error: null,
 };
-// ? {loggedIn: true, user: loggedInUser}
-// : {loggedIn: false, user: null, loggingIn: false, errors: null};
 
-const auth = (state = initialState, action) => {
+const booking = (state = initialState, action) => {
   switch (action.type) {
-    case authConstants.LOGIN_REQUEST:
+    case bookingConstants.BOOKING_DATA:
       return {
         ...state,
-        user: {},
-        loggedIn: false,
-        loggingIn: true,
-        errors: null,
-        confirmationResult: {},
+        bookingData: action.payload,
       };
-    case authConstants.CODE_RECEIVED:
+    case bookingConstants.BOOKING_REQUEST:
       return {
         ...state,
-        loggedIn: false,
-        loggingIn: true,
-        confirmationResult: action.payload,
-        errors: null,
+        bookingStart: true,
+        bookingResponse: {},
       };
-    case authConstants.LOGIN_SUCCESS:
+    case bookingConstants.BOOKING_SUCCESS:
       return {
         ...state,
-        loggedIn: true,
-        loggingIn: false,
-        user: action.payload,
-        errors: null,
+        bookingStart: false,
+        bookingResponse: action.payload,
+        error: null,
       };
-    case authConstants.LOGIN_FAILURE:
+    case bookingConstants.BOOKING_FAILURE:
       return {
         ...state,
-        user: {},
-        loggingIn: false,
-        errors: action.payload,
+        bookingStart: false,
+        bookingResponse: {},
+        error: action.payload,
       };
     default:
       return state;
   }
 };
 
-export default auth;
+export default booking;

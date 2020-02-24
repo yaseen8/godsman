@@ -7,29 +7,19 @@ import {View, Text, TextInput, ImageBackground, Image} from 'react-native';
 import {TouchableOpacity} from 'react-native-gesture-handler';
 import BgPattern from '../../assets/images/bg2.png';
 import {authConstants} from '../../redux/auth/constants';
-import {AsyncStorage} from 'react-native';
+import firebase from 'react-native-firebase';
 
 const SignIn = props => {
   useEffect(() => {
-    const user = retrieveData();
-    if (user) {
-      props.navigation.navigate('App');
-    }
-  });
-
-  const retrieveData = async () => {
-    try {
-      const value = await AsyncStorage.getItem('_user');
-      if (value !== null) {
-        console.log(JSON.parse(value));
-        return JSON.parse(value);
+    firebase.auth().onAuthStateChanged(user => {
+      if (user) {
+        console.log(user);
+        props.navigation.navigate('Home');
+      } else {
+        console.log('not logged');
       }
-      return null;
-    } catch (error) {
-      return null;
-      // Error retrieving data
-    }
-  };
+    });
+  });
 
   const {login, confirmationResult, confirmCode} = props;
   const [auth, setAuth] = useState({number: '', code: ''});
@@ -57,7 +47,10 @@ const SignIn = props => {
                 onChangeText={e => setAuth({...auth, number: e})}
                 placeholder="Enter your number"
               />
-              <TouchableOpacity style={styles.logBtn} onPress={userLogin}>
+              <TouchableOpacity
+                style={styles.logBtn}
+                onPress={userLogin}
+                disabled={!auth.number}>
                 <Text style={styles.btnText}>Next</Text>
               </TouchableOpacity>
             </View>

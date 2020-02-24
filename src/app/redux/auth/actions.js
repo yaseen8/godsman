@@ -1,7 +1,5 @@
 import {authConstants} from './constants';
-// import API from "../helpers/api";
 import firebase from 'react-native-firebase';
-import {AsyncStorage} from 'react-native';
 
 const login = auth => dispatch => {
   dispatch({type: authConstants.LOGIN_REQUEST});
@@ -29,9 +27,10 @@ const confirmCode = (
     .confirm(confirmationCode)
     .then(user => {
       console.log(user);
-      storeData(JSON.stringify(user._user));
-      // alert(JSON.stringify(user));
-      dispatch({type: authConstants.LOGIN_SUCCESS, payload: user._user});
+      dispatch({
+        type: authConstants.LOGIN_SUCCESS,
+        payload: JSON.stringify(user._user),
+      });
       props.navigation.navigate('App');
     })
     .catch(error => {
@@ -41,14 +40,6 @@ const confirmCode = (
       // alert(JSON.stringify(errors));
       dispatch({type: authConstants.LOGIN_FAILURE, payload: errors});
     });
-};
-
-const storeData = async user => {
-  try {
-    await AsyncStorage.setItem('_user', user);
-  } catch (error) {
-    // Error saving data
-  }
 };
 
 export const authActions = {

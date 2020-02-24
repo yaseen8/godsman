@@ -1,3 +1,3 @@
-import auth from './reducer';
+import booking from './reducer';
 
-export default auth;
+export default booking;

@@ -8,6 +8,7 @@ const initialState = {
 };
 
 const services = (state = initialState, action) => {
+  console.log('action ----- services', action);
   switch (action.type) {
     case servicesConstants.GET_TYPES:
       return {
@@ -22,7 +23,7 @@ const services = (state = initialState, action) => {
     case servicesConstants.GET_SERVICES:
       return {
         ...state,
-        services: action.pa
+        services: action.payload,
       };
     default:
       return state;

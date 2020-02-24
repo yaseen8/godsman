@@ -17,15 +17,23 @@ import HomeIcon2 from '../../assets/images/slide-icon2.png';
 import HomeIcon3 from '../../assets/images/slide-icon3.png';
 import {connect} from 'react-redux';
 import {servicesAction} from '../../redux/services/actions';
-
-import SignOut from "../../components/SignOut";
+import {bookingActions} from '../../redux/booking/actions';
 
 const Home = props => {
   let [showDropDown, setDropDown] = useState(false);
-  const {getTypes, types} = props;
+  const {
+    getTypes,
+    types,
+    getCategories,
+    categories,
+    getServices,
+    services,
+    selectedService,
+    bookingData,
+  } = props;
   useEffect(() => {
-    // getAllTypes();
-  })
+    getAllTypes();
+  }, [getAllTypes]);
   const showService = () => {
     if (showDropDown) {
       setDropDown(false);
@@ -36,14 +44,28 @@ const Home = props => {
   const getAllTypes = () => {
     getTypes();
     console.log('types', types);
-  }
+  };
   const goToDateTime = () => {
+    if (!bookingData.service) {
+      alert('Select service')
+      return;
+    }
     props.navigation.navigate('DateTime');
-  }
+  };
+  const typeSelected = event => {
+    getCategories(event.id);
+    setDropDown(false);
+  };
+  const getServiceList = category => {
+    getServices(category.id);
+  };
+  const userSelectedService = service => {
+    selectedService(service.id);
+  };
   return (
     <View>
       <View style={{height: '100%'}}>
-        <TopHeader />
+        <TopHeader navigation={props.navigation} />
         <View style={styles.bgTop}>
           <ImageBackground style={styles.bgPattern} source={BgPattern}>
             <TouchableOpacity
@@ -56,61 +78,74 @@ const Home = props => {
 
           {showDropDown && (
             <View style={styles.dropdownApp}>
-              <TouchableOpacity style={styles.dropdownLink}>
-                <Text style={styles.dropdownText}>I Need Labour</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.dropdownLink}>
-                <Text style={styles.dropdownText}>I Need Skilled Worker</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.dropdownLink}>
-                <Text style={styles.dropdownText}>I Need Renovation Work</Text>
-              </TouchableOpacity>
+              {types.map((item, index) => (
+                <TouchableOpacity
+                  style={styles.dropdownLink}
+                  key={index}
+                  onPress={() => typeSelected(item)}>
+                  <Text style={styles.dropdownText}>{item.name}</Text>
+                </TouchableOpacity>
+              ))}
             </View>
           )}
         </View>
 
         <View style={styles.homeSlide}>
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.slideBadges}>
-              <TouchableOpacity style={styles.badgeSelected}>
-                <Text style={styles.badgeText}>Civil Work</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.slideBadge}>
-                <Text style={styles.badgeText}>Electrical</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.slideBadge}>
-                <Text style={styles.badgeText}>Heating & Cooling</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.slideBadge}>
-                <Text style={styles.badgeText}>4</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.slideBadge}>
-                <Text style={styles.badgeText}>5</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.slideBadge}>
-                <Text style={styles.badgeText}>6</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
-
-          <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-            <View style={styles.slideBoxes}>
-              <TouchableOpacity style={styles.iconBox}>
-                <Image style={styles.slideIcon} source={HomeIcon1} />
-                <Text style={styles.slideText}>
-                  Walls, Extension Renovation
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconBoxSelected}>
-                <Image style={styles.slideIcon} source={HomeIcon2} />
-                <Text style={styles.slideText}>Doors, Windows Gate etc</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.iconBox}>
-                <Image style={styles.slideIcon} source={HomeIcon3} />
-                <Text style={styles.slideText}>Lawn, Guarden</Text>
-              </TouchableOpacity>
-            </View>
-          </ScrollView>
+          {categories.length ? (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View style={styles.slideBadges}>
+                {categories.map((category, index) => (
+                  <TouchableOpacity
+                    style={styles.badgeSelected}
+                    key={index}
+                    onPress={() => getServiceList(category)}>
+                    <Text style={styles.badgeText}>{category.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          ) : (
+            []
+          )}
+          {services.length ? (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View style={styles.slideBoxes}>
+                {services.map((service, index) => (
+                  <TouchableOpacity
+                    style={styles.iconBox}
+                    key={index}
+                    onPress={() => userSelectedService(service)}>
+                    <Image style={styles.slideIcon} source={HomeIcon1} />
+                    <Text style={styles.slideText}>{service.name}</Text>
+                  </TouchableOpacity>
+                ))}
+              </View>
+            </ScrollView>
+          ) : (
+            []
+          )}
+          {/*<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>*/}
+          {/*  <View style={styles.slideBoxes}>*/}
+          {/*    <TouchableOpacity style={styles.iconBox}>*/}
+          {/*      <Image style={styles.slideIcon} source={HomeIcon1} />*/}
+          {/*      <Text style={styles.slideText}>*/}
+          {/*        Walls, Extension Renovation*/}
+          {/*      </Text>*/}
+          {/*    </TouchableOpacity>*/}
+          {/*    <TouchableOpacity style={styles.iconBoxSelected}>*/}
+          {/*      <Image style={styles.slideIcon} source={HomeIcon2} />*/}
+          {/*      <Text style={styles.slideText}>Doors, Windows Gate etc</Text>*/}
+          {/*    </TouchableOpacity>*/}
+          {/*    <TouchableOpacity style={styles.iconBox}>*/}
+          {/*      <Image style={styles.slideIcon} source={HomeIcon3} />*/}
+          {/*      <Text style={styles.slideText}>Lawn, Guarden</Text>*/}
+          {/*    </TouchableOpacity>*/}
+          {/*  </View>*/}
+          {/*</ScrollView>*/}
         </View>
 
         <View style={styles.stepsFooter}>
@@ -133,13 +168,17 @@ const Home = props => {
 };
 
 const mapStateToProps = state => {
+  console.log('state', state);
   const {types, categories, services} = state.services;
-  return {types, categories, services};
+  const {bookingData} = state.booking;
+  return {types, categories, services, bookingData};
 };
 
 const mapDispatchToProps = {
   getTypes: servicesAction.getTypes,
   getCategories: servicesAction.getCategories,
+  getServices: servicesAction.getServices,
+  selectedService: bookingActions.selectedService,
 };
 
 const connectedHomePage = connect(
@@ -178,8 +217,8 @@ const styles = StyleSheet.create({
     borderBottomColor: '#fff',
   },
   arrowIcon: {
-      width: 30,
-      height: 20
+    width: 30,
+    height: 20,
   },
 
   dropdownApp: {
@@ -192,11 +231,9 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
     position: 'absolute',
     top: '75%',
-    left: 0,
     width: '90%',
+    left: 0,
     maxHeight: 200,
-    display: 'none',
-    // opacity: 0
   },
   dropdownLink: {
     paddingVertical: 10,

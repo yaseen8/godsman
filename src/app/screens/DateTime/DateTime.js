@@ -9,76 +9,297 @@ import {
   ScrollView,
 } from 'react-native';
 import TopHeader from '../../components/Header';
-import {Container, Content} from 'native-base';
 import BgPattern from '../../assets/images/bg2.png';
 import ArrowIcon from '../../assets/images/arrow-icon.png';
-import HomeIcon1 from '../../assets/images/slide-icon1.png';
-import HomeIcon2 from '../../assets/images/slide-icon2.png';
-import HomeIcon3 from '../../assets/images/slide-icon3.png';
+import DatePicker from 'react-native-datepicker';
+import {bookingActions} from '../../redux/booking/actions';
+import {connect} from 'react-redux';
 
 const DateTime = props => {
+  const {bookingData, selectedBookingDate, selectedBookingTime} = props;
+  const [currentDate, setCurrentDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [show, setShow] = useState(false);
+  const [showMorning, setMorning] = useState(true);
+  const [showAfternoon, setAfternoon] = useState(false);
+  const [showEvening, setEvening] = useState(false);
+  useEffect(() => {
+    setCurrentDate(getCurrentDate());
+  }, []);
+  const getCurrentDate = () => {
+    const date = new Date();
+    let yyyy = date.getFullYear();
+    let mm = date.getMonth();
+    let dd = date.getDate();
+    if (mm < 9) {
+      mm = '0' + mm;
+    }
+    if (dd < 0) {
+      dd = '0' + dd;
+    }
+    return yyyy + '-' + mm + '-' + dd;
+  };
+  const showDatePicker = () => {
+    if (show) {
+      setShow(false);
+    } else {
+      setShow(true);
+    }
+  };
+  const selectedData = date => {
+    if (date < currentDate) {
+      alert('Please select future dates');
+      return;
+    }
+    // alert(date);
+    selectedBookingDate(bookingData, date);
+  };
+  const morningTime = () => {
+    setAfternoon(false);
+    setEvening(false);
+    if (showMorning) {
+      setMorning(false);
+    } else {
+      setMorning(true);
+    }
+  };
+  const afternoonTime = () => {
+    setMorning(false);
+    setEvening(false);
+    if (showAfternoon) {
+      setAfternoon(false);
+    } else {
+      setAfternoon(true);
+    }
+  };
+  const eveningTime = () => {
+    setAfternoon(false);
+    setMorning(false);
+    if (showEvening) {
+      setEvening(false);
+    } else {
+      setEvening(true);
+    }
+  };
+  const selectBookingTime = time => {
+    setSelectedTime(time);
+    selectedBookingTime(bookingData, time);
+  };
+  const location = () => {
+    if (!bookingData.date || !bookingData.time) {
+      alert('Please select date and time');
+      return;
+    }
+    props.navigation.navigate('Location');
+  };
   return (
     <View>
       <View style={{height: '100%'}}>
-        <TopHeader />
+        <TopHeader navigation={props.navigation} />
         <View style={styles.bgTop}>
           <ImageBackground style={styles.bgPattern} source={BgPattern}>
-            <TouchableOpacity style={styles.positionTitle}>
-              <Text style={styles.titleText}>When? 21-02-20</Text>
-              <Image style={styles.arrowIcon} source={ArrowIcon} />
+            <TouchableOpacity
+              style={styles.positionTitle}
+              onPress={showDatePicker}>
+              <Text style={styles.titleText}>When? </Text>
+              <DatePicker
+                mode="date"
+                format="YYYY-MM-DD"
+                iconSource={ArrowIcon}
+                onDateChange={date => selectedData(date)}
+                minDate={currentDate}
+                customStyles={{
+                  dateIcon: {
+                    opacity: 100,
+                  },
+
+                  dateInput: {
+                    opacity: 0,
+                  },
+                }}
+              />
+              {/*<Image style={styles.arrowIcon} source={ArrowIcon} />*/}
             </TouchableOpacity>
           </ImageBackground>
         </View>
-
         <View style={styles.homeSlide}>
           <View style={styles.slideBadges}>
             <View>
-              <TouchableOpacity style={styles.badgeSelected}>
+              <TouchableOpacity
+                style={showMorning ? styles.badgeSelected : styles.slideBadge}
+                onPress={morningTime}>
                 <Text style={styles.badgeText}>Morning</Text>
               </TouchableOpacity>
-              <View style={[styles.timeBadges, {display: 'flex'}]}>
-                <TouchableOpacity style={styles.slideBadge}>
-                  <Text style={styles.badgeText}>09:00 AM</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.selectedTimeBadge}>
-                  <Text style={styles.badgeTextSelected}>10:00 AM</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.slideBadge}>
-                  <Text style={styles.badgeText}>11:00 AM</Text>
-                </TouchableOpacity>
-              </View>
+              {showMorning && (
+                <View style={[styles.timeBadges, {display: 'flex'}]}>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '09:00 AM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={() => selectBookingTime('09:00 AM')}>
+                    <Text
+                      style={
+                        selectedTime === '09:00 AM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      09:00 AM
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '10:00 AM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={() => selectBookingTime('10:00 AM')}>
+                    <Text
+                      style={
+                        selectedTime === '10:00 AM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      10:00 AM
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '11:00 AM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={() => selectBookingTime('11:00 AM')}>
+                    <Text
+                      style={
+                        selectedTime === '11:00 AM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      11:00 AM
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
             <View>
-              <TouchableOpacity style={styles.slideBadge}>
+              <TouchableOpacity
+                style={showAfternoon ? styles.badgeSelected : styles.slideBadge}
+                onPress={afternoonTime}>
                 <Text style={styles.badgeText}>Afternoon</Text>
               </TouchableOpacity>
-              <View style={styles.timeBadges}>
-                <TouchableOpacity style={styles.slideBadge}>
-                  <Text style={styles.badgeText}>09:00 AM</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.selectedTimeBadge}>
-                  <Text style={styles.badgeTextSelected}>10:00 AM</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.slideBadge}>
-                  <Text style={styles.badgeText}>11:00 AM</Text>
-                </TouchableOpacity>
-              </View>
+              {showAfternoon && (
+                <View style={[styles.timeBadges, {display: 'flex'}]}>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '01:00 PM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={() => selectBookingTime('01:00 PM')}>
+                    <Text
+                      style={
+                        selectedTime === '01:00 PM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      01:00 PM
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '02:00 PM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={() => selectBookingTime('02:00 PM')}>
+                    <Text
+                      style={
+                        selectedTime === '02:00 PM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      02:00 PM
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '03:00 PM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={() => selectBookingTime('03:00 PM')}>
+                    <Text
+                      style={
+                        selectedTime === '03:00 PM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      03:00 PM
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '04:00 PM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={() => selectBookingTime('04:00 PM')}>
+                    <Text
+                      style={
+                        selectedTime === '04:00 PM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      04:00 PM
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
             <View>
-              <TouchableOpacity style={styles.slideBadge}>
+              <TouchableOpacity
+                style={showEvening ? styles.badgeSelected : styles.slideBadge}
+                onPress={eveningTime}>
                 <Text style={styles.badgeText}>Evening</Text>
               </TouchableOpacity>
-              <View style={styles.timeBadges}>
-                <TouchableOpacity style={styles.slideBadge}>
-                  <Text style={styles.badgeText}>09:00 AM</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.selectedTimeBadge}>
-                  <Text style={styles.badgeTextSelected}>10:00 AM</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.slideBadge}>
-                  <Text style={styles.badgeText}>11:00 AM</Text>
-                </TouchableOpacity>
-              </View>
+              {showEvening && (
+                <View style={[styles.timeBadges, {display: 'flex'}]}>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '05:00 PM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={selectBookingTime('05:00 PM')}>
+                    <Text
+                      style={
+                        selectedTime === '05:00 PM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      05:00 PM
+                    </Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={
+                      selectedTime === '06:00 PM'
+                        ? styles.selectedTimeBadge
+                        : styles.slideBadge
+                    }
+                    onPress={selectBookingTime('06:00 PM')}>
+                    <Text
+                      style={
+                        selectedTime === '06:00 PM'
+                          ? styles.badgeTextSelected
+                          : styles.badgeText
+                      }>
+                      06:00 PM
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
             </View>
           </View>
           <Text style={styles.warningText}>
@@ -96,7 +317,7 @@ const DateTime = props => {
               You will be ask to set up job location in next step
             </Text>
           </View>
-          <TouchableOpacity style={styles.stepBtn}>
+          <TouchableOpacity style={styles.stepBtn} onPress={location}>
             <Image source={ArrowIcon} style={styles.stepArrow} />
           </TouchableOpacity>
         </View>
@@ -105,7 +326,23 @@ const DateTime = props => {
   );
 };
 
-export default DateTime;
+const mapStateToProps = state => {
+  const {bookingData} = state.booking;
+  return {bookingData};
+};
+
+const mapDispatchToProps = {
+  selectedService: bookingActions.selectedService,
+  selectedBookingDate: bookingActions.selectedBookingDate,
+  selectedBookingTime: bookingActions.selectedBookingTime,
+};
+
+const connectedDateTimePage = connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(DateTime);
+
+export {connectedDateTimePage as DateTime};
 
 const styles = StyleSheet.create({
   bgTop: {
