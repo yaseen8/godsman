@@ -1,26 +1,31 @@
-import {commonConstants} from './constants';
-// import firebase from 'firebase';
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import {DrawerActions} from 'react-navigation-drawer';
-
-
+import firebase from 'react-native-firebase';
+import {commonConstants} from './constants';
 
 const toggleSideBar = props => dispatch => {
-  console.log('action----', props);
-  
-  // dispatch({type: commonConstants.TOGGLE_SIDEBAR});
   props.navigation.dispatch(DrawerActions.openDrawer());
 };
 
 const closeSideBar = props => dispatch => {
-  console.log('action 222----', props);
-  
-  // dispatch({type: commonConstants.TOGGLE_SIDEBAR});
   props.navigation.dispatch(DrawerActions.closeDrawer());
+};
+
+const getCompanyInfo = () => dispatch => {
+  const company = [];
+  firebase
+    .firestore()
+    .collection('company')
+    .onSnapshot(snapshot => {
+      snapshot.forEach(object => {
+        company.push({id: object.id, ...object.data()});
+      });
+      dispatch({type: commonConstants.COMPANY_DETAIL, payload: company[0]});
+    });
 };
 
 export const commonActions = {
   toggleSideBar,
-  closeSideBar
-  // logout,
+  closeSideBar,
+  getCompanyInfo,
 };

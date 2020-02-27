@@ -3,6 +3,8 @@ const initialState = {
   bookingStart: false,
   bookingData: {},
   bookingResponse: {},
+  userBookingsData: [],
+  bookingLogs: [],
   error: null,
 };
 
@@ -24,6 +26,7 @@ const booking = (state = initialState, action) => {
         ...state,
         bookingStart: false,
         bookingResponse: action.payload,
+        bookingData: {},
         error: null,
       };
     case bookingConstants.BOOKING_FAILURE:
@@ -32,6 +35,16 @@ const booking = (state = initialState, action) => {
         bookingStart: false,
         bookingResponse: {},
         error: action.payload,
+      };
+    case bookingConstants.GET_USER_BOOKING:
+      return {
+        ...state,
+        userBookingsData: action.payload,
+      };
+    case bookingConstants.GET_BOOKING_LOG:
+      return {
+        ...state,
+        bookingLogs: action.payload,
       };
     default:
       return state;

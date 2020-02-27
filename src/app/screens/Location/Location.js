@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  Modal,
 } from 'react-native';
 import TopHeader from '../../components/Header';
 import {Container, Content} from 'native-base';
@@ -18,6 +19,7 @@ import Geolocation from 'react-native-geolocation-service';
 import {PermissionsAndroid} from 'react-native';
 import {bookingActions} from '../../redux/booking/actions';
 import {connect} from 'react-redux';
+import SearchLocation from '../SearchLocation';
 
 const Location = props => {
   const [latitude, setLatitude] = useState(0);
@@ -25,6 +27,7 @@ const Location = props => {
   const [location, setLocation] = useState('');
   const [mapRegion, setMapRegion] = useState(null);
   const {bookingData, bookService} = props;
+  const [showModal, setModalVisibility] = useState(false);
   const [currentLatLong, setCurrentLatLong] = useState({
     latitude: 0,
     longitude: 0,
@@ -32,6 +35,7 @@ const Location = props => {
   useEffect(() => {
     getCurrentLocation();
   }, [getCurrentLocation]);
+
   const getCurrentLocation = async () => {
     try {
       const granted = await PermissionsAndroid.request(
@@ -73,7 +77,6 @@ const Location = props => {
                   'ADDRESS GEOCODE is BACK!! => ' +
                     JSON.stringify(responseJson),
                 );
-                console.log(responseJson.results[0].formatted_address);
                 setLocation(responseJson.results[0].formatted_address);
               });
             console.log('latitude', latitude);
@@ -102,57 +105,85 @@ const Location = props => {
     bookingData.latitude = latitude;
     bookingData.longitude = longitude;
     bookingData.location = location;
-    bookService(bookingData);
+    bookService(bookingData, props);
+  };
+  const searchLocation = () => {
+    setModalVisibility(true);
+  };
+  const closeSearchModal = (data) => {
+    setModalVisibility(false);
+    if (data) {
+      let region = {
+        latitude: data.geometry.location.lat,
+        longitude: data.geometry.location.lng,
+        latitudeDelta: 0.00922 * 1.5,
+        longitudeDelta: 0.00421 * 1.5,
+      };
+      onRegionChange(region);
+      let current = {
+        latitude: data.geometry.location.lat,
+        longitude: data.geometry.location.lng,
+      };
+      setCurrentLatLong(current);
+      setLatitude(data.geometry.location.lat);
+      setLongitude(data.geometry.location.lng);
+      setLocation(data.formatted_address);
+    }
   };
   return (
     <View>
       <View style={{height: '100%'}}>
+        <Modal animationType="slide" transparent={false} visible={showModal}>
+          <SearchLocation closeModal={(data) => closeSearchModal(data)} />
+        </Modal>
         <TopHeader navigation={props.navigation} />
         <View style={styles.bgTop}>
           <ImageBackground style={styles.bgPattern} source={BgPattern}>
-            <TouchableOpacity style={styles.positionTitle}>
-              <Text style={styles.titleText}>59, Tulsa Rd</Text>
+            <TouchableOpacity
+              style={styles.positionTitle}
+              onPress={searchLocation}>
+              <Text style={styles.titleText}>{location}</Text>
               <Image style={styles.arrowIcon} source={ArrowIcon} />
             </TouchableOpacity>
           </ImageBackground>
 
-          <View style={styles.locationDropdown}>
-            {/*<ScrollView>*/}
-            {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-            {/*    <Text style={styles.dropdownText}>Secter C, DHA</Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-            {/*    <Text style={styles.dropdownText}>*/}
-            {/*      Street 43, Secter C, DHA*/}
-            {/*    </Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-            {/*    <Text style={styles.dropdownText}>*/}
-            {/*      Street 46, Secter C, DHA*/}
-            {/*    </Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-            {/*    <Text style={styles.dropdownText}>*/}
-            {/*      Street 56, Secter C, DHA*/}
-            {/*    </Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-            {/*    <Text style={styles.dropdownText}>*/}
-            {/*      Street 59, Secter C, DHA*/}
-            {/*    </Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-            {/*    <Text style={styles.dropdownText}>*/}
-            {/*      Street 65, Secter C, DHA*/}
-            {/*    </Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-            {/*    <Text style={styles.dropdownText}>*/}
-            {/*      Street 73, Secter C, DHA*/}
-            {/*    </Text>*/}
-            {/*  </TouchableOpacity>*/}
-            {/*</ScrollView>*/}
-          </View>
+          {/*<View style={styles.locationDropdown}>*/}
+          {/*<ScrollView>*/}
+          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
+          {/*    <Text style={styles.dropdownText}>Secter C, DHA</Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
+          {/*    <Text style={styles.dropdownText}>*/}
+          {/*      Street 43, Secter C, DHA*/}
+          {/*    </Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
+          {/*    <Text style={styles.dropdownText}>*/}
+          {/*      Street 46, Secter C, DHA*/}
+          {/*    </Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
+          {/*    <Text style={styles.dropdownText}>*/}
+          {/*      Street 56, Secter C, DHA*/}
+          {/*    </Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
+          {/*    <Text style={styles.dropdownText}>*/}
+          {/*      Street 59, Secter C, DHA*/}
+          {/*    </Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
+          {/*    <Text style={styles.dropdownText}>*/}
+          {/*      Street 65, Secter C, DHA*/}
+          {/*    </Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
+          {/*    <Text style={styles.dropdownText}>*/}
+          {/*      Street 73, Secter C, DHA*/}
+          {/*    </Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*</ScrollView>*/}
+          {/*</View>*/}
         </View>
 
         <View style={styles.locationInner}>
@@ -224,7 +255,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   titleText: {
-    fontSize: 34,
+    fontSize: 20,
     lineHeight: 39,
     fontWeight: '300',
     color: '#fff',

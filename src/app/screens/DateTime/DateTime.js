@@ -14,22 +14,25 @@ import ArrowIcon from '../../assets/images/arrow-icon.png';
 import DatePicker from 'react-native-datepicker';
 import {bookingActions} from '../../redux/booking/actions';
 import {connect} from 'react-redux';
+import Moment, {unix} from 'moment';
 
 const DateTime = props => {
   const {bookingData, selectedServiceData} = props;
   const [currentDate, setCurrentDate] = useState('');
+  const [currentTime, setCurrentTime] = useState('');
   const [selectedTime, setSelectedTime] = useState('');
+  const [selectedDate, setSelectedDate] = useState('');
   const [show, setShow] = useState(false);
   const [showMorning, setMorning] = useState(true);
   const [showAfternoon, setAfternoon] = useState(false);
   const [showEvening, setEvening] = useState(false);
   useEffect(() => {
-    setCurrentDate(getCurrentDate());
+    getCurrentDate();
   }, []);
   const getCurrentDate = () => {
     const date = new Date();
     let yyyy = date.getFullYear();
-    let mm = date.getMonth();
+    let mm = date.getMonth() + 1;
     let dd = date.getDate();
     if (mm < 9) {
       mm = '0' + mm;
@@ -37,7 +40,8 @@ const DateTime = props => {
     if (dd < 0) {
       dd = '0' + dd;
     }
-    return yyyy + '-' + mm + '-' + dd;
+    setCurrentDate(yyyy + '-' + mm + '-' + dd);
+    setCurrentTime(date.getHours());
   };
   const showDatePicker = () => {
     if (show) {
@@ -47,7 +51,7 @@ const DateTime = props => {
     }
   };
   const selectedData = date => {
-    console.log('asdasd', bookingData);
+    setSelectedDate(date);
     if (date < currentDate) {
       alert('Please select future dates');
       return;
@@ -103,7 +107,7 @@ const DateTime = props => {
             <TouchableOpacity
               style={styles.positionTitle}
               onPress={showDatePicker}>
-              <Text style={styles.titleText}>When? </Text>
+              <Text style={styles.titleText}>{selectedDate ? selectedDate : 'Select Date'} </Text>
               <DatePicker
                 mode="date"
                 format="YYYY-MM-DD"
@@ -113,6 +117,9 @@ const DateTime = props => {
                 customStyles={{
                   dateIcon: {
                     opacity: 100,
+                    width: 30,
+                    height: 20,
+                    marginRight: 10,
                   },
 
                   dateInput: {
@@ -274,7 +281,7 @@ const DateTime = props => {
                         ? styles.selectedTimeBadge
                         : styles.slideBadge
                     }
-                    onPress={selectBookingTime('05:00 PM')}>
+                    onPress={() => selectBookingTime('05:00 PM')}>
                     <Text
                       style={
                         selectedTime === '05:00 PM'
@@ -290,7 +297,7 @@ const DateTime = props => {
                         ? styles.selectedTimeBadge
                         : styles.slideBadge
                     }
-                    onPress={selectBookingTime('06:00 PM')}>
+                    onPress={() => selectBookingTime('06:00 PM')}>
                     <Text
                       style={
                         selectedTime === '06:00 PM'
@@ -365,7 +372,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   titleText: {
-    fontSize: 36,
+    fontSize: 25,
     lineHeight: 39,
     fontWeight: '300',
     color: '#fff',

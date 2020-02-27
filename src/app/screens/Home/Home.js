@@ -16,6 +16,7 @@ import {connect} from 'react-redux';
 import {servicesAction} from '../../redux/services/actions';
 import {bookingActions} from '../../redux/booking/actions';
 import firebase from 'react-native-firebase';
+import {authActions} from '../../redux/auth/actions';
 
 const Home = props => {
   let [showDropDown, setDropDown] = useState(false);
@@ -28,13 +29,15 @@ const Home = props => {
     services,
     selectedServiceData,
     bookingData,
+    saveUserObject,
   } = props;
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        if (!bookingData.userId) {
-          bookingData.userId = user._user.uid;
+        if (!bookingData.userID) {
+          bookingData.userID = user._user.uid;
           bookingData.status = 'PENDING';
+          saveUserObject(user._user);
           selectedServiceData(bookingData);
         }
       } else {
@@ -42,7 +45,7 @@ const Home = props => {
       }
     });
     getAllTypes();
-  }, []);
+  }, [bookingData, getAllTypes, saveUserObject, selectedServiceData]);
   const showService = () => {
     if (showDropDown) {
       setDropDown(false);
@@ -66,10 +69,26 @@ const Home = props => {
     setDropDown(false);
   };
   const getServiceList = category => {
+    categories.forEach(item => {
+      if (item.id === category.id) {
+        item.selected = true;
+      } else {
+        item.selected = false;
+      }
+    });
     getServices(category.id);
   };
   const userSelectedService = service => {
+    services.forEach(item => {
+      if (item.id === service.id) {
+        item.selected = true;
+      } else {
+        item.selected = false;
+      }
+    })
+    console.log(service);
     bookingData.serviceID = service.id;
+    bookingData.serviceName = service.name;
     selectedServiceData(bookingData);
   };
   return (
@@ -108,7 +127,11 @@ const Home = props => {
               <View style={styles.slideBadges}>
                 {categories.map((category, index) => (
                   <TouchableOpacity
-                    style={styles.badgeSelected}
+                    style={
+                      category.selected
+                        ? styles.badgeSelected
+                        : styles.slideBadge
+                    }
                     key={index}
                     onPress={() => getServiceList(category)}>
                     <Text style={styles.badgeText}>{category.name}</Text>
@@ -126,7 +149,9 @@ const Home = props => {
               <View style={styles.slideBoxes}>
                 {services.map((service, index) => (
                   <TouchableOpacity
-                    style={styles.iconBox}
+                    style={
+                      service.selected ? styles.iconBoxSelected : styles.iconBox
+                    }
                     key={index}
                     onPress={() => userSelectedService(service)}>
                     <Image style={styles.slideIcon} source={HomeIcon1} />
@@ -139,22 +164,22 @@ const Home = props => {
             []
           )}
           {/*<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>*/}
-          {/*  <View style={styles.slideBoxes}>*/}
-          {/*    <TouchableOpacity style={styles.iconBox}>*/}
-          {/*      <Image style={styles.slideIcon} source={HomeIcon1} />*/}
-          {/*      <Text style={styles.slideText}>*/}
-          {/*        Walls, Extension Renovation*/}
-          {/*      </Text>*/}
-          {/*    </TouchableOpacity>*/}
-          {/*    <TouchableOpacity style={styles.iconBoxSelected}>*/}
-          {/*      <Image style={styles.slideIcon} source={HomeIcon2} />*/}
-          {/*      <Text style={styles.slideText}>Doors, Windows Gate etc</Text>*/}
-          {/*    </TouchableOpacity>*/}
-          {/*    <TouchableOpacity style={styles.iconBox}>*/}
-          {/*      <Image style={styles.slideIcon} source={HomeIcon3} />*/}
-          {/*      <Text style={styles.slideText}>Lawn, Guarden</Text>*/}
-          {/*    </TouchableOpacity>*/}
-          {/*  </View>*/}
+          {/*<View style={styles.slideBoxes}>*/}
+          {/*  <TouchableOpacity style={styles.iconBox}>*/}
+          {/*    <Image style={styles.slideIcon} source={HomeIcon1} />*/}
+          {/*    <Text style={styles.slideText}>*/}
+          {/*      Walls,*/}
+          {/*    </Text>*/}
+          {/*  </TouchableOpacity>*/}
+          {/*<TouchableOpacity style={styles.iconBoxSelected}>*/}
+          {/*  <Image style={styles.slideIcon} source={HomeIcon1} />*/}
+          {/*  <Text style={styles.slideText}>Doors, Windows Gate etc</Text>*/}
+          {/*</TouchableOpacity>*/}
+          {/*<TouchableOpacity style={styles.iconBox}>*/}
+          {/*  <Image style={styles.slideIcon} source={HomeIcon1} />*/}
+          {/*  <Text style={styles.slideText}>Lawn, Guarden</Text>*/}
+          {/*</TouchableOpacity>*/}
+          {/*</View>*/}
           {/*</ScrollView>*/}
         </View>
 
@@ -189,6 +214,7 @@ const mapDispatchToProps = {
   getCategories: servicesAction.getCategories,
   getServices: servicesAction.getServices,
   selectedServiceData: bookingActions.selectedServiceData,
+  saveUserObject: authActions.saveUserObject,
 };
 
 const connectedHomePage = connect(
@@ -295,10 +321,10 @@ const styles = StyleSheet.create({
   slideBoxes: {
     flexDirection: 'row',
     flex: 1,
-    marginTop: 25,
+    paddingVertical: 25,
   },
   iconBox: {
-    width: '25%',
+    minWidth: 150,
     backgroundColor: '#fff',
     elevation: 3,
     textAlign: 'left',
@@ -307,9 +333,10 @@ const styles = StyleSheet.create({
     borderColor: '#dcdcdc',
     borderRadius: 10,
     marginRight: 15,
+    flex: 1,
   },
   iconBoxSelected: {
-    width: '25%',
+    minWidth: 150,
     backgroundColor: '#fff',
     elevation: 3,
     textAlign: 'left',

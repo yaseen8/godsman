@@ -13,24 +13,39 @@ const SignIn = props => {
   useEffect(() => {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
-        console.log(user);
-        props.navigation.navigate('Home');
+        console.log('usetr data', user);
+        if (user._user.displayName) {
+          props.navigation.navigate('Home');
+        }
       } else {
         console.log('not logged');
       }
     });
   });
 
-  const {login, confirmationResult, confirmCode} = props;
-  const [auth, setAuth] = useState({number: '', code: ''});
+  const {
+    login,
+    confirmationResult,
+    confirmCode,
+    user,
+    userData,
+    saveUserName,
+    errors,
+    clearState,
+  } = props;
+  const [auth, setAuth] = useState({number: '', code: '', name: ''});
   const userLogin = () => {
-    // alert(verificationCode);
     login(auth);
   };
   const codeConfirmation = () => {
-    // alert(JSON.stringify(confirmationResult));
     confirmCode(confirmationResult, auth.code, props);
   };
+  const saveUserData = () => {
+    userData(auth.name, props);
+  };
+  const clear = () => {
+    clearState();
+  }
   return (
     <View style={styles.signIn_wrap}>
       <View style={styles.signTop}>
@@ -55,7 +70,7 @@ const SignIn = props => {
               </TouchableOpacity>
             </View>
           )}
-          {confirmationResult && (
+          {!saveUserName && confirmationResult && !errors && (
             <View>
               <TextInput
                 style={styles.inputField}
@@ -64,8 +79,32 @@ const SignIn = props => {
               />
               <TouchableOpacity
                 style={styles.logBtn}
-                onPress={codeConfirmation}>
+                onPress={codeConfirmation}
+                disabled={!auth.code}>
                 <Text style={styles.btnText}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {saveUserName && (
+            <View>
+              <TextInput
+                style={styles.inputField}
+                onChangeText={e => setAuth({...auth, name: e})}
+                placeholder="Name"
+              />
+              <TouchableOpacity
+                style={styles.logBtn}
+                onPress={saveUserData}
+                disabled={!auth.name}>
+                <Text style={styles.btnText}>Continue</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+          {errors && (
+            <View>
+              <Text>{errors}</Text>
+              <TouchableOpacity style={styles.logBtn} onPress={clear}>
+                <Text style={styles.btnText}>Back To Sign In</Text>
               </TouchableOpacity>
             </View>
           )}
@@ -76,13 +115,22 @@ const SignIn = props => {
 };
 
 const mapStateToProps = state => {
-  const {loggingIn, errors, loggedIn, confirmationResult} = state.auth;
-  return {loggingIn, errors, loggedIn, confirmationResult};
+  const {
+    loggingIn,
+    errors,
+    loggedIn,
+    confirmationResult,
+    user,
+    saveUserName,
+  } = state.auth;
+  return {loggingIn, errors, loggedIn, confirmationResult, user, saveUserName};
 };
 
 const mapDispatchToProps = {
   login: authActions.login,
   confirmCode: authActions.confirmCode,
+  userData: authActions.userData,
+  clearState: authActions.clearState,
 };
 
 const connectedSignInPage = connect(

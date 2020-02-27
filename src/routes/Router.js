@@ -5,7 +5,7 @@ import {createDrawerNavigator} from 'react-navigation-drawer';
 import {Dimensions, Text, Image, View, TouchableOpacity} from 'react-native';
 import SignIn from '../app/screens/SignIn';
 import Home from '../app/screens/Home';
-import MyBooking from '../app/screens/MyBooking/MyBooking';
+import MyBooking from '../app/screens/MyBooking';
 import SideNav from '../app/components/SideNav';
 import DateTime from '../app/screens/DateTime';
 import Location from '../app/screens/Location';
@@ -14,9 +14,10 @@ import CallUs from '../app/screens/CallUs';
 import TopHeader from '../app/components/Header';
 import MenuBtn from '../app/assets/images/menu-btn.png';
 import SplashScreen from '../app/screens/SplashScreen';
-import JobDetail from '../app/screens/JobDetail/JobDetail';
+import JobDetail from '../app/screens/JobDetail';
 import AboutUs from '../app/screens/AboutUs/AboutUs';
 import HowItWorks from '../app/screens/HowItWorks/HowItWorks';
+import SignOut from '../app/components/SignOut';
 
 const AuthRoute = createStackNavigator(
   {
@@ -35,11 +36,14 @@ const AuthRoute = createStackNavigator(
     CallUs: {
       screen: CallUs,
     },
+    JobDetail: {
+      screen: JobDetail,
+    },
     SplashScreen: {
       screen: SplashScreen,
     },
-    JobDetail: {
-      screen: JobDetail,
+    SignOut: {
+      screen: SignOut,
     },
 
     // Drawer Screens

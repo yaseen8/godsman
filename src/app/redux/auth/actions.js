@@ -3,7 +3,6 @@ import firebase from 'react-native-firebase';
 
 const login = auth => dispatch => {
   dispatch({type: authConstants.LOGIN_REQUEST});
-  // const appVerifier = window.recaptchaVerifier;
   firebase
     .auth()
     .signInWithPhoneNumber(auth.number)
@@ -11,9 +10,9 @@ const login = auth => dispatch => {
       dispatch({type: authConstants.CODE_RECEIVED, payload: data});
     })
     .catch(error => {
-      console.log('error', error);
       const errors = [];
       errors.push(error.message);
+      alert(errors);
       dispatch({type: authConstants.LOGIN_FAILURE, payload: errors});
     });
 };
@@ -27,22 +26,50 @@ const confirmCode = (
     .confirm(confirmationCode)
     .then(user => {
       console.log(user);
-      dispatch({
-        type: authConstants.LOGIN_SUCCESS,
-        payload: JSON.stringify(user._user),
-      });
-      props.navigation.navigate('App');
+      if (user._user.displayName) {
+        dispatch({
+          type: authConstants.LOGIN_SUCCESS,
+          payload: JSON.stringify(user._user),
+        });
+        props.navigation.navigate('Home');
+      } else {
+        dispatch({type: authConstants.USER_DATA, payload: true});
+      }
     })
     .catch(error => {
-      console.log(error);
       const errors = [];
       errors.push(error.message);
-      // alert(JSON.stringify(errors));
+      alert(errors);
       dispatch({type: authConstants.LOGIN_FAILURE, payload: errors});
     });
+};
+
+const userData = (name, props) => dispatch => {
+  firebase.auth().onAuthStateChanged(currentUser => {
+    const data = {
+      displayName: name,
+    };
+    currentUser
+      .updateProfile(data)
+      .then(user => {
+        props.navigation.navigate('Home');
+      })
+      .catch(error => console.log('error upddating', error));
+  });
+};
+
+const clearState = () => dispatch => {
+  dispatch({type: authConstants.INITIAL_STATE});
+};
+
+const saveUserObject = user => dispatch => {
+  dispatch({type: authConstants.USER_OBJECT, payload: user});
 };
 
 export const authActions = {
   login,
   confirmCode,
-}; // const appVerifier = window.recaptchaVerifier;
+  userData,
+  clearState,
+  saveUserObject,
+};

@@ -1,2 +1,2 @@
-import CallUs from './CallUs';
+import {CallUs} from './CallUs';
 export default CallUs;

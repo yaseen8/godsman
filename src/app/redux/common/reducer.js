@@ -2,6 +2,7 @@ import {commonConstants} from './constants';
 
 const initialState = {
   openSideBar: false,
+  companyDetail: {},
   errors: [],
 };
 
@@ -24,6 +25,11 @@ const common = (state = initialState, action) => {
     case commonConstants.LOGOUT_FAILURE:
       return {
         ...state,
+      };
+    case commonConstants.COMPANY_DETAIL:
+      return {
+        ...state,
+        companyDetail: action.payload,
       };
     default:
       return state;

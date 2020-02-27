@@ -1,16 +1,13 @@
 import {authConstants} from './constants';
-// let auth = null;
 
-// const loggedInUser = JSON.parse(localStorage.getItem('_userData'));
 const initialState = {
   loggedIn: false,
   user: null,
   loggingIn: false,
   errors: null,
   confirmationResult: null,
+  saveUserName: false,
 };
-// ? {loggedIn: true, user: loggedInUser}
-// : {loggedIn: false, user: null, loggingIn: false, errors: null};
 
 const auth = (state = initialState, action) => {
   switch (action.type) {
@@ -45,6 +42,24 @@ const auth = (state = initialState, action) => {
         user: {},
         loggingIn: false,
         errors: action.payload,
+      };
+    case authConstants.USER_DATA:
+      return {
+        ...state,
+        saveUserName: action.payload,
+      };
+    case authConstants.INITIAL_STATE:
+      return {
+        loggedIn: false,
+        user: null,
+        loggingIn: false,
+        errors: null,
+        confirmationResult: null,
+        saveUserName: false,
+      };
+    case authConstants.USER_OBJECT:
+      return {
+        user: action.payload,
       };
     default:
       return state;
