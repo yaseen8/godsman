@@ -1,12 +1,13 @@
 import React from 'react';
-import {Text, View, TouchableOpacity} from 'react-native';
+import {Text, View, TouchableOpacity, StyleSheet} from 'react-native';
 import {bookingActions} from '../../redux/booking/actions';
 import {connect} from 'react-redux';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
+import styles from '../../styles/style';
 
 const SearchLocation = props => {
   return (
-    <View style={{marginTop: 40, zIndex: 9999999999, position: 'relative', flex: 1}}>
+    <View style={{zIndex: 9999999999, position: 'relative', flex: 1}}>
       <GooglePlacesAutocomplete
         placeholder="Search"
         minLength={2} // minimum length of text to search
@@ -29,18 +30,26 @@ const SearchLocation = props => {
         }}
         styles={{
           textInputContainer: {
-            backgroundColor: 'transparent',
+            backgroundColor: "rgba(255, 205, 40, 0.5)",
             margin: 0,
             padding: 0,
             borderTopWidth: 0,
             borderBottomWidth: 0,
+            paddingVertical: 5,
+            height: 60
           },
           textInput: {
-            textAlign: 'center',
-            borderColor: '#cbb4c0',
+            // textAlign: 'center',
+            borderColor: "transparent",
             borderBottomWidth: 1,
-            color: '#5d5d5d',
+            color: '#ac879a',
             fontSize: 14,
+            backgroundColor: '#ffcd28',
+            borderWidth: 0,
+            padding:  15,
+            height: 35,
+            marginRight: 55,
+            borderRadius: 20,
           },
           description: {
             color: '#ac879a',
@@ -51,8 +60,12 @@ const SearchLocation = props => {
           },
         }}
       />
-      <TouchableOpacity onPress={() => props.closeModal()}>
-        <Text>Close</Text>
+      <TouchableOpacity style={{
+        position: "absolute",
+        top: 20,
+        right: 10
+      }} onPress={() => props.closeModal()}>
+        <Text style={{color: "#000"}}>Close</Text>
       </TouchableOpacity>
     </View>
   );

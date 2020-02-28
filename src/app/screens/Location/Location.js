@@ -25,13 +25,19 @@ const Location = props => {
   const [latitude, setLatitude] = useState(0);
   const [longitude, setLongitude] = useState(0);
   const [location, setLocation] = useState('');
-  const [mapRegion, setMapRegion] = useState(null);
+  const [mapRegion, setMapRegion] = useState({
+    latitude: 33.5511579,
+    longitude: 73.124524,
+    latitudeDelta: 0.013830000000000002,
+    longitudeDelta: 0.006315,
+  });
   const {bookingData, bookService} = props;
   const [showModal, setModalVisibility] = useState(false);
   const [currentLatLong, setCurrentLatLong] = useState({
     latitude: 0,
     longitude: 0,
   });
+  const [initialMap, setInitialMap] = useState(true);
   useEffect(() => {
     getCurrentLocation();
   }, [getCurrentLocation]);
@@ -60,26 +66,11 @@ const Location = props => {
               latitudeDelta: 0.00922 * 1.5,
               longitudeDelta: 0.00421 * 1.5,
             };
+            getLocationFromLatLong(
+              position.coords.latitude,
+              position.coords.longitude,
+            );
             onRegionChange(region);
-            setLatitude(position.coords.latitude);
-            setLongitude(position.coords.longitude);
-            fetch(
-              'https://maps.googleapis.com/maps/api/geocode/json?address=' +
-                position.coords.latitude +
-                ',' +
-                position.coords.longitude +
-                '&key=' +
-                'AIzaSyBNulbH7z0tPb7zlzL8UVM-mn_0ZfIVeLk',
-            )
-              .then(response => response.json())
-              .then(responseJson => {
-                console.log(
-                  'ADDRESS GEOCODE is BACK!! => ' +
-                    JSON.stringify(responseJson),
-                );
-                setLocation(responseJson.results[0].formatted_address);
-              });
-            console.log('latitude', latitude);
           },
           error => {
             console.log('error', error);
@@ -101,6 +92,25 @@ const Location = props => {
   const onRegionChange = region => {
     setMapRegion(region);
   };
+  const getLocationFromLatLong = (lat, long) => {
+    setLatitude(lat);
+    setLongitude(long);
+    fetch(
+      'https://maps.googleapis.com/maps/api/geocode/json?address=' +
+        lat +
+        ',' +
+        long +
+        '&key=' +
+        'AIzaSyBNulbH7z0tPb7zlzL8UVM-mn_0ZfIVeLk',
+    )
+      .then(response => response.json())
+      .then(responseJson => {
+        console.log(
+          'ADDRESS GEOCODE is BACK!! => ' + JSON.stringify(responseJson),
+        );
+        setLocation(responseJson.results[0].formatted_address);
+      });
+  };
   const bookUserService = () => {
     bookingData.latitude = latitude;
     bookingData.longitude = longitude;
@@ -110,7 +120,8 @@ const Location = props => {
   const searchLocation = () => {
     setModalVisibility(true);
   };
-  const closeSearchModal = (data) => {
+  const closeSearchModal = data => {
+    setInitialMap(false);
     setModalVisibility(false);
     if (data) {
       let region = {
@@ -129,12 +140,17 @@ const Location = props => {
       setLongitude(data.geometry.location.lng);
       setLocation(data.formatted_address);
     }
+    setInitialMap(true);
+  };
+  const changeRegion = region => {
+    setInitialMap(true);
+    onRegionChange(region);
   };
   return (
     <View>
       <View style={{height: '100%'}}>
         <Modal animationType="slide" transparent={false} visible={showModal}>
-          <SearchLocation closeModal={(data) => closeSearchModal(data)} />
+          <SearchLocation closeModal={data => closeSearchModal(data)} />
         </Modal>
         <TopHeader navigation={props.navigation} />
         <View style={styles.bgTop}>
@@ -142,60 +158,57 @@ const Location = props => {
             <TouchableOpacity
               style={styles.positionTitle}
               onPress={searchLocation}>
-              <Text style={styles.titleText}>{location}</Text>
+              <Text style={styles.titleText}>
+                {location && location.length > 80
+                  ? location.slice(0, 80) + ' ....'
+                  : location}
+              </Text>
               <Image style={styles.arrowIcon} source={ArrowIcon} />
             </TouchableOpacity>
           </ImageBackground>
-
-          {/*<View style={styles.locationDropdown}>*/}
-          {/*<ScrollView>*/}
-          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-          {/*    <Text style={styles.dropdownText}>Secter C, DHA</Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-          {/*    <Text style={styles.dropdownText}>*/}
-          {/*      Street 43, Secter C, DHA*/}
-          {/*    </Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-          {/*    <Text style={styles.dropdownText}>*/}
-          {/*      Street 46, Secter C, DHA*/}
-          {/*    </Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-          {/*    <Text style={styles.dropdownText}>*/}
-          {/*      Street 56, Secter C, DHA*/}
-          {/*    </Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-          {/*    <Text style={styles.dropdownText}>*/}
-          {/*      Street 59, Secter C, DHA*/}
-          {/*    </Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-          {/*    <Text style={styles.dropdownText}>*/}
-          {/*      Street 65, Secter C, DHA*/}
-          {/*    </Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*  <TouchableOpacity style={styles.dropdownLink}>*/}
-          {/*    <Text style={styles.dropdownText}>*/}
-          {/*      Street 73, Secter C, DHA*/}
-          {/*    </Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*</ScrollView>*/}
-          {/*</View>*/}
         </View>
 
         <View style={styles.locationInner}>
-          <View style={styles.mapSec}>
-            {/*<Image source={MapImg} style={styles.mapImg} />*/}
-            <MapView
-              provider={PROVIDER_GOOGLE}
-              style={styles.mapImg}
-              region={mapRegion}>
-              <MapView.Marker coordinate={currentLatLong} />
-            </MapView>
-          </View>
+          {initialMap && (
+            <View style={styles.mapSec}>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={styles.mapImg}
+                initialRegion={mapRegion}
+                onRegionChange={e => changeRegion(e)}
+                onRegionChangeComplete={e =>
+                  getLocationFromLatLong(e.latitude, e.longitude)
+                }>
+                <View style={styles.markerFixed}>
+                  <MapView.Marker
+                    coordinate={mapRegion}
+                    style={styles.marker}
+                    draggable
+                  />
+                </View>
+              </MapView>
+            </View>
+          )}
+          {!initialMap && (
+            <View style={styles.mapSec}>
+              <MapView
+                provider={PROVIDER_GOOGLE}
+                style={styles.mapImg}
+                region={mapRegion}
+                onRegionChange={e => changeRegion(e)}
+                onRegionChangeComplete={e =>
+                  getLocationFromLatLong(e.latitude, e.longitude)
+                }>
+                <View style={styles.markerFixed}>
+                  <MapView.Marker
+                    coordinate={mapRegion}
+                    style={styles.marker}
+                    draggable
+                  />
+                </View>
+              </MapView>
+            </View>
+          )}
         </View>
 
         <View style={styles.stepsFooter}>
@@ -255,12 +268,13 @@ const styles = StyleSheet.create({
     paddingHorizontal: 15,
   },
   titleText: {
-    fontSize: 20,
-    lineHeight: 39,
+    fontSize: 16,
+    lineHeight: 20,
     fontWeight: '300',
     color: '#fff',
     borderBottomWidth: 1,
     borderBottomColor: '#fff',
+    maxWidth: '80%',
   },
   // arrowIcon: {
   //     width: 30,
@@ -359,5 +373,27 @@ const styles = StyleSheet.create({
   stepArrow: {
     transform: [{rotate: '-90deg'}],
     marginLeft: 6,
+  },
+  markerFixed: {
+    left: '50%',
+    marginLeft: -24,
+    marginTop: -48,
+    position: 'absolute',
+    top: '50%',
+  },
+  marker: {
+    height: 48,
+    width: 48,
+  },
+  footer: {
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    bottom: 0,
+    position: 'absolute',
+    width: '100%',
+  },
+  region: {
+    color: '#fff',
+    lineHeight: 20,
+    margin: 20,
   },
 });
