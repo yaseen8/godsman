@@ -52,10 +52,6 @@ const DateTime = props => {
   };
   const selectedData = date => {
     setSelectedDate(date);
-    if (date < currentDate) {
-      alert('Please select future dates');
-      return;
-    }
     bookingData.date = date;
     selectedServiceData(bookingData);
   };

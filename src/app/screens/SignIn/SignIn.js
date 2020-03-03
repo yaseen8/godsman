@@ -18,7 +18,7 @@ const SignIn = props => {
           props.navigation.navigate('Home');
         }
       } else {
-        console.log('not logged');
+        props.navigation.navigate('Auth');
       }
     });
   });
@@ -35,7 +35,11 @@ const SignIn = props => {
   } = props;
   const [auth, setAuth] = useState({number: '', code: '', name: ''});
   const userLogin = () => {
-    login(auth);
+    if (auth.number.includes('+92')) {
+      login(auth);
+    } else {
+      alert('Phone number must start with +92');
+    }
   };
   const codeConfirmation = () => {
     confirmCode(confirmationResult, auth.code, props);
@@ -60,7 +64,7 @@ const SignIn = props => {
               <TextInput
                 style={styles.inputField}
                 onChangeText={e => setAuth({...auth, number: e})}
-                placeholder="Enter your number"
+                placeholder="Enter your number (+92)"
               />
               <TouchableOpacity
                 style={styles.logBtn}
@@ -101,9 +105,9 @@ const SignIn = props => {
             </View>
           )}
           {errors && (
-            <View>
+            <View >
               <Text>{errors}</Text>
-              <TouchableOpacity style={styles.logBtn} onPress={clear}>
+              <TouchableOpacity style={styles.logBtn} onPress={clear} >
                 <Text style={styles.btnText}>Back To Sign In</Text>
               </TouchableOpacity>
             </View>
@@ -198,6 +202,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    marginTop: 20,
   },
   btnText: {
     fontSize: 18,

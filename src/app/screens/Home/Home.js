@@ -7,6 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   ScrollView,
+  ActivityIndicator,
 } from 'react-native';
 import TopHeader from '../../components/Header';
 import BgPattern from '../../assets/images/bg2.png';
@@ -41,7 +42,7 @@ const Home = props => {
           selectedServiceData(bookingData);
         }
       } else {
-        console.log('not logged');
+        props.navigation.navigate('Auth');
       }
     });
     getAllTypes();
@@ -79,13 +80,13 @@ const Home = props => {
     getServices(category.id);
   };
   const userSelectedService = service => {
-    services.forEach(item => {
-      if (item.id === service.id) {
-        item.selected = true;
+    services.forEach(object => {
+      if (object.id === service.id) {
+        object.selected = true;
       } else {
-        item.selected = false;
+        object.selected = false;
       }
-    })
+    });
     console.log(service);
     bookingData.serviceID = service.id;
     bookingData.serviceName = service.name;
@@ -142,6 +143,8 @@ const Home = props => {
           ) : (
             []
           )}
+        </View>
+        <View style={styles.homeSlide}>
           {services.length ? (
             <ScrollView
               horizontal={true}
@@ -163,24 +166,6 @@ const Home = props => {
           ) : (
             []
           )}
-          {/*<ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>*/}
-          {/*<View style={styles.slideBoxes}>*/}
-          {/*  <TouchableOpacity style={styles.iconBox}>*/}
-          {/*    <Image style={styles.slideIcon} source={HomeIcon1} />*/}
-          {/*    <Text style={styles.slideText}>*/}
-          {/*      Walls,*/}
-          {/*    </Text>*/}
-          {/*  </TouchableOpacity>*/}
-          {/*<TouchableOpacity style={styles.iconBoxSelected}>*/}
-          {/*  <Image style={styles.slideIcon} source={HomeIcon1} />*/}
-          {/*  <Text style={styles.slideText}>Doors, Windows Gate etc</Text>*/}
-          {/*</TouchableOpacity>*/}
-          {/*<TouchableOpacity style={styles.iconBox}>*/}
-          {/*  <Image style={styles.slideIcon} source={HomeIcon1} />*/}
-          {/*  <Text style={styles.slideText}>Lawn, Guarden</Text>*/}
-          {/*</TouchableOpacity>*/}
-          {/*</View>*/}
-          {/*</ScrollView>*/}
         </View>
 
         <View style={styles.stepsFooter}>

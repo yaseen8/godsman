@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   Modal,
+  ActivityIndicator,
 } from 'react-native';
 import TopHeader from '../../components/Header';
 import {Container, Content} from 'native-base';
@@ -26,12 +27,12 @@ const Location = props => {
   const [longitude, setLongitude] = useState(0);
   const [location, setLocation] = useState('');
   const [mapRegion, setMapRegion] = useState({
-    latitude: 33.5511579,
-    longitude: 73.124524,
+    latitude: 33.6844202,
+    longitude: 73.04788479999999,
     latitudeDelta: 0.013830000000000002,
     longitudeDelta: 0.006315,
   });
-  const {bookingData, bookService} = props;
+  const {bookingData, bookService, bookingStart} = props;
   const [showModal, setModalVisibility] = useState(false);
   const [currentLatLong, setCurrentLatLong] = useState({
     latitude: 0,
@@ -121,7 +122,7 @@ const Location = props => {
     setModalVisibility(true);
   };
   const closeSearchModal = data => {
-    setInitialMap(false);
+    setInitialMap(true);
     setModalVisibility(false);
     if (data) {
       let region = {
@@ -140,11 +141,11 @@ const Location = props => {
       setLongitude(data.geometry.location.lng);
       setLocation(data.formatted_address);
     }
-    setInitialMap(true);
+    setInitialMap(false);
   };
   const changeRegion = region => {
-    setInitialMap(true);
     onRegionChange(region);
+    setInitialMap(false);
   };
   return (
     <View>
@@ -174,7 +175,8 @@ const Location = props => {
               <MapView
                 provider={PROVIDER_GOOGLE}
                 style={styles.mapImg}
-                initialRegion={mapRegion}
+                region={mapRegion}
+                // initialRegion={mapRegion}
                 onRegionChange={e => changeRegion(e)}
                 onRegionChangeComplete={e =>
                   getLocationFromLatLong(e.latitude, e.longitude)
@@ -194,7 +196,7 @@ const Location = props => {
               <MapView
                 provider={PROVIDER_GOOGLE}
                 style={styles.mapImg}
-                region={mapRegion}
+                initialRegion={mapRegion}
                 onRegionChange={e => changeRegion(e)}
                 onRegionChangeComplete={e =>
                   getLocationFromLatLong(e.latitude, e.longitude)
@@ -220,9 +222,12 @@ const Location = props => {
             <Text style={styles.stepDesc}>Thats all!</Text>
             <Text style={styles.stepDesc}>Click Next to complete.</Text>
           </View>
-          <TouchableOpacity style={styles.stepBtn} onPress={bookUserService}>
-            <Image source={ArrowIcon} style={styles.stepArrow} />
-          </TouchableOpacity>
+          {!bookingStart && (
+            <TouchableOpacity style={styles.stepBtn} onPress={bookUserService}>
+              <Image source={ArrowIcon} style={styles.stepArrow} />
+            </TouchableOpacity>
+          )}
+          {bookingStart && <ActivityIndicator size="large" color="#ffcd28" />}
         </View>
       </View>
     </View>
@@ -230,8 +235,8 @@ const Location = props => {
 };
 
 const mapStateToProps = state => {
-  const {bookingData} = state.booking;
-  return {bookingData};
+  const {bookingData, bookingStart} = state.booking;
+  return {bookingData, bookingStart};
 };
 
 const mapDispatchToProps = {

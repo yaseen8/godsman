@@ -55,5 +55,5 @@ export const bookingActions = {
   selectedServiceData,
   bookService,
   userBooking,
-  getBookingLogs
+  getBookingLogs,
 };

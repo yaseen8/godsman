@@ -25,9 +25,8 @@ const getCategories = typeID => dispatch => {
       snapshot.forEach(object => {
         categories.push({id: object.id, ...object.data()});
       });
-      console.log(categories);
+      dispatch({type: servicesConstants.GET_SERVICES, payload: []});
       dispatch({type: servicesConstants.GET_CATEGORIES, payload: categories});
-
     });
 };
 

@@ -17,7 +17,10 @@ import Moment from 'moment';
 const JobDetail = props => {
   console.log(props);
   const selectedBooking = props.navigation.state.params.bookingDetail;
-  const {bookingLogs} = props;
+  const {bookingLogs, getBookingLogs} = props;
+  useEffect(() => {
+    getBookingLogs(selectedBooking.id);
+  }, [getBookingLogs, selectedBooking.id]);
   return (
     <View>
       <ScrollView>
@@ -45,12 +48,12 @@ const JobDetail = props => {
           </View>
 
           <View style={styles.container}>
-            <View style={styles.bookingDetailContent}>
-              {bookingLogs.length ? (
-                <View style={styles.detailRow}>
-                  <View style={styles.stepDot} />
-                  {bookingLogs.map((log, index) => (
-                    <View style={styles.cardInfo} key={index}>
+            {bookingLogs.length ? (
+              <View style={styles.bookingDetailContent}>
+                {bookingLogs.map((log, index) => (
+                  <View style={styles.detailRow} key={index}>
+                    <View style={styles.stepDot} />
+                    <View style={styles.cardInfo} >
                       <Text style={styles.cardTitle}>{log.note}</Text>
                       <Text style={styles.cardDate}>
                         {Moment.unix(log.timestamp.seconds).format(
@@ -58,39 +61,12 @@ const JobDetail = props => {
                         )}
                       </Text>
                     </View>
-                  ))}
-                </View>
-              ) : (
-                []
-              )}
-              {/*<View style={styles.detailRow}>*/}
-              {/*  <View style={styles.stepDot} />*/}
-              {/*  <View style={styles.cardInfo}>*/}
-              {/*    <Text style={styles.cardTitle}>*/}
-              {/*      Purchase of material complete*/}
-              {/*    </Text>*/}
-              {/*    <Text style={styles.cardDate}>22-02-2020 10:04:54 AM</Text>*/}
-              {/*  </View>*/}
-              {/*</View>*/}
-              {/*<View style={styles.detailRow}>*/}
-              {/*  <View style={styles.stepDot} />*/}
-              {/*  <View style={styles.cardInfo}>*/}
-              {/*    <Text style={styles.cardTitle}>*/}
-              {/*      Day 1 Work Finished : 20%*/}
-              {/*    </Text>*/}
-              {/*    <Text style={styles.cardDate}>22-02-2020 10:04:54 AM</Text>*/}
-              {/*  </View>*/}
-              {/*</View>*/}
-              {/*<View style={styles.detailRow}>*/}
-              {/*  <View style={styles.stepDot} />*/}
-              {/*  <View style={styles.cardInfo}>*/}
-              {/*    <Text style={styles.cardTitle}>*/}
-              {/*      Payment Recieved: PKR 10,000 Rs*/}
-              {/*    </Text>*/}
-              {/*    <Text style={styles.cardDate}>22-02-2020 10:04:54 AM</Text>*/}
-              {/*  </View>*/}
-              {/*</View>*/}
-            </View>
+                  </View>
+                ))}
+              </View>
+            ) : (
+              []
+            )}
           </View>
         </View>
       </ScrollView>

@@ -19,7 +19,7 @@ import {connect} from 'react-redux';
 
 const SideNav = props => {
   // alert(JSON.stringify(props));
-  const {closeSideBar, user} = props;
+  const {closeSideBar, user, logout} = props;
   const closeDrawer = () => {
     closeSideBar(props);
   };
@@ -73,7 +73,7 @@ const SideNav = props => {
           </TouchableOpacity>
           <TouchableOpacity
             style={styles.navLink}
-            onPress={() => props.navigation.navigate('SignOut')}>
+            onPress={() => logout(props)}>
             <Text style={styles.navLinkText}>Sign Out</Text>
           </TouchableOpacity>
         </View>
@@ -94,6 +94,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {
   closeSideBar: commonActions.closeSideBar,
+  logout: commonActions.logout,
 };
 
 const connectedTopHeader = connect(

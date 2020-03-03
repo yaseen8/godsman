@@ -24,8 +24,19 @@ const getCompanyInfo = () => dispatch => {
     });
 };
 
+const logout = props => dispatch => {
+  firebase
+    .auth()
+    .signOut()
+    .then(resp => {
+      props.navigation.navigate('Auth');
+    })
+    .catch(error => console.log(error));
+};
+
 export const commonActions = {
   toggleSideBar,
   closeSideBar,
   getCompanyInfo,
+  logout,
 };

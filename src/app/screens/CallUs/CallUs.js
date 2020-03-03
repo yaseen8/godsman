@@ -20,7 +20,7 @@ import {commonActions} from '../../redux/common/actions';
 const CallUs = props => {
   useEffect(() => {
     props.getCompanyInfo();
-  }, [props]);
+  }, []);
   const call = () => {
     Linking.openURL('tel:' + props.companyDetail.phone);
   };
