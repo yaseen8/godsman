@@ -223,7 +223,12 @@ const Location = props => {
             <Text style={styles.stepDesc}>Click Next to complete.</Text>
           </View>
           {!bookingStart && (
-            <TouchableOpacity style={styles.stepBtn} onPress={bookUserService}>
+            <TouchableOpacity
+              style={
+                latitude && longitude ? styles.stepBtn : styles.disabledBtn
+              }
+              onPress={bookUserService}
+              disabled={!latitude && !longitude}>
               <Image source={ArrowIcon} style={styles.stepArrow} />
             </TouchableOpacity>
           )}
@@ -374,6 +379,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f88613',
+  },
+  disabledBtn: {
+    width: 65,
+    height: 65,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#BBBBBB',
   },
   stepArrow: {
     transform: [{rotate: '-90deg'}],

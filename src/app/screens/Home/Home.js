@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
   ActivityIndicator,
+  BackHandler,
 } from 'react-native';
 import TopHeader from '../../components/Header';
 import BgPattern from '../../assets/images/bg2.png';
@@ -21,6 +22,7 @@ import {authActions} from '../../redux/auth/actions';
 
 const Home = props => {
   let [showDropDown, setDropDown] = useState(false);
+  const [selectedService, setSelectedService] = useState('');
   const {
     getTypes,
     types,
@@ -46,7 +48,19 @@ const Home = props => {
       }
     });
     getAllTypes();
-  }, [bookingData, getAllTypes, saveUserObject, selectedServiceData]);
+    console.log(props);
+    BackHandler.addEventListener('hardwareBackPress', () => {
+      if (props.navigation.state.routeName === 'Home') {
+        return true;
+      }
+    });
+  }, [
+    bookingData,
+    getAllTypes,
+    props.navigation,
+    saveUserObject,
+    selectedServiceData,
+  ]);
   const showService = () => {
     if (showDropDown) {
       setDropDown(false);
@@ -56,7 +70,15 @@ const Home = props => {
   };
   const getAllTypes = () => {
     getTypes();
-    console.log('types', types);
+    if (types.length) {
+      typeSelected(types[0]);
+      if (categories.length) {
+        getServiceList(categories[0]);
+        if (services.length) {
+          userSelectedService(services[0]);
+        }
+      }
+    }
   };
   const goToDateTime = () => {
     if (!bookingData.serviceID) {
@@ -71,23 +93,16 @@ const Home = props => {
   };
   const getServiceList = category => {
     categories.forEach(item => {
-      if (item.id === category.id) {
-        item.selected = true;
-      } else {
-        item.selected = false;
-      }
+      item.selected = item.id === category.id;
     });
     getServices(category.id);
   };
   const userSelectedService = service => {
     services.forEach(object => {
-      if (object.id === service.id) {
-        object.selected = true;
-      } else {
-        object.selected = false;
-      }
+      object.selected = object.id === service.id;
     });
     console.log(service);
+    setSelectedService(service.id);
     bookingData.serviceID = service.id;
     bookingData.serviceName = service.name;
     selectedServiceData(bookingData);
@@ -178,7 +193,10 @@ const Home = props => {
               You will be asked to set preferred date in next step
             </Text>
           </View>
-          <TouchableOpacity style={styles.stepBtn} onPress={goToDateTime}>
+          <TouchableOpacity
+            style={selectedService ? styles.stepBtn : styles.disabledBtn}
+            onPress={goToDateTime}
+            disabled={!selectedService}>
             <Image source={ArrowIcon} style={styles.stepArrow} />
           </TouchableOpacity>
         </View>
@@ -395,6 +413,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f88613',
+  },
+  disabledBtn: {
+    width: 65,
+    height: 65,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#BBBBBB',
   },
   stepArrow: {
     width: 30,

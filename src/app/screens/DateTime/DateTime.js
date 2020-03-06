@@ -28,20 +28,11 @@ const DateTime = props => {
   const [showEvening, setEvening] = useState(false);
   useEffect(() => {
     getCurrentDate();
-  }, []);
+  }, [getCurrentDate]);
   const getCurrentDate = () => {
-    const date = new Date();
-    let yyyy = date.getFullYear();
-    let mm = date.getMonth() + 1;
-    let dd = date.getDate();
-    if (mm < 9) {
-      mm = '0' + mm;
-    }
-    if (dd < 0) {
-      dd = '0' + dd;
-    }
-    setCurrentDate(yyyy + '-' + mm + '-' + dd);
-    setCurrentTime(date.getHours());
+    setSelectedDate(Moment().format('YYYY-MM-DD'));
+    setCurrentDate(Moment().format('YYYY-MM-DD'));
+    setCurrentTime(Moment().format('HH:MM a'));
   };
   const showDatePicker = () => {
     if (show) {
@@ -94,6 +85,7 @@ const DateTime = props => {
     }
     props.navigation.navigate('Location');
   };
+  bookingData.date = selectedDate;
   return (
     <View>
       <View style={{height: '100%'}}>
@@ -103,7 +95,9 @@ const DateTime = props => {
             <TouchableOpacity
               style={styles.positionTitle}
               onPress={showDatePicker}>
-              <Text style={styles.titleText}>{selectedDate ? selectedDate : 'Select Date'} </Text>
+              <Text style={styles.titleText}>
+                {selectedDate ? selectedDate : 'Select Date'}{' '}
+              </Text>
               <DatePicker
                 mode="date"
                 format="YYYY-MM-DD"
@@ -322,7 +316,12 @@ const DateTime = props => {
               You will be ask to set up job location in next step
             </Text>
           </View>
-          <TouchableOpacity style={styles.stepBtn} onPress={location}>
+          <TouchableOpacity
+            style={
+              selectedDate && selectedTime ? styles.stepBtn : styles.disabledBtn
+            }
+            onPress={location}
+            disabled={!selectedDate || !selectedTime}>
             <Image source={ArrowIcon} style={styles.stepArrow} />
           </TouchableOpacity>
         </View>
@@ -524,6 +523,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#f88613',
+  },
+  disabledBtn: {
+    width: 65,
+    height: 65,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#BBBBBB',
   },
   stepArrow: {
     width: 30,
