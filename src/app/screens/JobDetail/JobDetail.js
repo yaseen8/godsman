@@ -13,6 +13,7 @@ import BgPattern from '../../assets/images/bg2.png';
 import {bookingActions} from '../../redux/booking/actions';
 import {connect} from 'react-redux';
 import Moment from 'moment';
+import ArrowIcon from '../../assets/images/arrow-icon.png';
 
 const JobDetail = props => {
   console.log(props);
@@ -23,53 +24,62 @@ const JobDetail = props => {
   }, [getBookingLogs, selectedBooking.id]);
   return (
     <View>
-      <ScrollView>
-        <View style={{height: '100%'}}>
-          <TopHeader navigation={props.navigation} />
-          <View style={styles.bgTop}>
-            <ImageBackground style={styles.bgPattern} source={BgPattern}>
-              <View style={styles.positionTitle}>
-                <View style={{flexDirection: 'row'}}>
-                  <Text style={styles.titleText}>Job Detail</Text>
-                </View>
-                <Text style={styles.jobBookDate}>
-                  Date Booked:
-                  {selectedBooking
-                    ? Moment.unix(selectedBooking.timestamp.seconds).format(
-                        'MMMM Do YYYY',
-                      )
-                    : ''}
-                </Text>
-                <Text style={styles.bookingInProgress}>
-                  {selectedBooking.status}
-                </Text>
-              </View>
-            </ImageBackground>
-          </View>
-
-          <View style={styles.container}>
-            {bookingLogs.length ? (
-              <View style={styles.bookingDetailContent}>
-                {bookingLogs.map((log, index) => (
-                  <View style={styles.detailRow} key={index}>
-                    <View style={styles.stepDot} />
-                    <View style={styles.cardInfo} >
-                      <Text style={styles.cardTitle}>{log.note}</Text>
-                      <Text style={styles.cardDate}>
-                        {Moment.unix(log.timestamp.seconds).format(
-                          'MMMM Do YYYY',
-                        )}
-                      </Text>
-                    </View>
+      <View style={{height: '100%'}}>
+        <ScrollView>
+          <View style={{height: '100%'}}>
+            <TopHeader navigation={props.navigation} />
+            <View style={styles.bgTop}>
+              <ImageBackground style={styles.bgPattern} source={BgPattern}>
+                <View style={styles.positionTitle}>
+                  <View style={{flexDirection: 'row'}}>
+                    <Text style={styles.titleText}>Job Detail</Text>
                   </View>
-                ))}
-              </View>
-            ) : (
-              []
-            )}
+                  <Text style={styles.jobBookDate}>
+                    Date Booked:
+                    {selectedBooking
+                      ? Moment.unix(selectedBooking.timestamp.seconds).format(
+                          'MMMM Do YYYY',
+                        )
+                      : ''}
+                  </Text>
+                  <Text style={styles.bookingInProgress}>
+                    {selectedBooking.status}
+                  </Text>
+                </View>
+              </ImageBackground>
+            </View>
+
+            <View style={styles.container}>
+              {bookingLogs.length ? (
+                <View style={styles.bookingDetailContent}>
+                  {bookingLogs.map((log, index) => (
+                    <View style={styles.detailRow} key={index}>
+                      <View style={styles.stepDot} />
+                      <View style={styles.cardInfo}>
+                        <Text style={styles.cardTitle}>{log.note}</Text>
+                        <Text style={styles.cardDate}>
+                          {Moment.unix(log.timestamp.seconds).format(
+                            'MMMM Do YYYY',
+                          )}
+                        </Text>
+                      </View>
+                    </View>
+                  ))}
+                </View>
+              ) : (
+                []
+              )}
+            </View>
           </View>
+        </ScrollView>
+        <View style={styles.stepsFooter}>
+          <TouchableOpacity
+            style={styles.stepBtn}
+            onPress={() => props.navigation.navigate('MyBooking')}>
+            <Image source={ArrowIcon} style={styles.backArrow} />
+          </TouchableOpacity>
         </View>
-      </ScrollView>
+      </View>
     </View>
   );
 };
@@ -164,5 +174,27 @@ const styles = StyleSheet.create({
     lineHeight: 26,
     marginBottom: 1,
     fontWeight: '300',
+  },
+  stepsFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingLeft: 15,
+    paddingRight: 15,
+    alignContent: 'flex-end',
+    marginTop: 'auto',
+    paddingBottom: 20,
+  },
+  stepBtn: {
+    width: 65,
+    height: 65,
+    borderRadius: 40,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#f88613',
+  },
+  backArrow: {
+    width: 30,
+    height: 25,
+    transform: [{rotate: '-270deg'}],
   },
 });

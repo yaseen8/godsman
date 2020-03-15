@@ -32,7 +32,8 @@ const DateTime = props => {
   const getCurrentDate = () => {
     setSelectedDate(Moment().format('YYYY-MM-DD'));
     setCurrentDate(Moment().format('YYYY-MM-DD'));
-    setCurrentTime(Moment().format('HH:MM a'));
+    setCurrentTime(Moment().format('hh:mm A'));
+    console.log(Moment().format('hh:mm A'));
   };
   const showDatePicker = () => {
     if (show) {
@@ -72,6 +73,9 @@ const DateTime = props => {
     } else {
       setEvening(true);
     }
+  };
+  const showTimeSlot = slotTime => {
+    return true;
   };
   const selectBookingTime = time => {
     setSelectedTime(time);
@@ -131,22 +135,24 @@ const DateTime = props => {
               </TouchableOpacity>
               {showMorning && (
                 <View style={[styles.timeBadges, {display: 'flex'}]}>
-                  <TouchableOpacity
-                    style={
-                      selectedTime === '09:00 AM'
-                        ? styles.selectedTimeBadge
-                        : styles.slideBadge
-                    }
-                    onPress={() => selectBookingTime('09:00 AM')}>
-                    <Text
+                  {showTimeSlot('09:00 PM') && (
+                    <TouchableOpacity
                       style={
                         selectedTime === '09:00 AM'
-                          ? styles.badgeTextSelected
-                          : styles.badgeText
-                      }>
-                      09:00 AM
-                    </Text>
-                  </TouchableOpacity>
+                          ? styles.selectedTimeBadge
+                          : styles.slideBadge
+                      }
+                      onPress={() => selectBookingTime('09:00 AM')}>
+                      <Text
+                        style={
+                          selectedTime === '09:00 AM'
+                            ? styles.badgeTextSelected
+                            : styles.badgeText
+                        }>
+                        09:00 AM
+                      </Text>
+                    </TouchableOpacity>
+                  )}
                   <TouchableOpacity
                     style={
                       selectedTime === '10:00 AM'
@@ -307,6 +313,11 @@ const DateTime = props => {
         </View>
 
         <View style={styles.stepsFooter}>
+          <TouchableOpacity
+            style={styles.stepBtn}
+            onPress={() => props.navigation.navigate('Home')}>
+            <Image source={ArrowIcon} style={styles.backArrow} />
+          </TouchableOpacity>
           <View style={styles.stepsInfo}>
             <View style={styles.stepCol}>
               <View style={styles.stepDot} />
@@ -537,5 +548,10 @@ const styles = StyleSheet.create({
     height: 25,
     transform: [{rotate: '-90deg'}],
     marginLeft: 6,
+  },
+  backArrow: {
+    width: 30,
+    height: 25,
+    transform: [{rotate: '-270deg'}],
   },
 });

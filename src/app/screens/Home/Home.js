@@ -13,7 +13,7 @@ import {
 import TopHeader from '../../components/Header';
 import BgPattern from '../../assets/images/bg2.png';
 import ArrowIcon from '../../assets/images/arrow-icon.png';
-import HomeIcon1 from '../../assets/images/slide-icon1.png';
+import Select from '../../assets/images/select.png';
 import {connect} from 'react-redux';
 import {servicesAction} from '../../redux/services/actions';
 import {bookingActions} from '../../redux/booking/actions';
@@ -35,6 +35,7 @@ const Home = props => {
     saveUserObject,
   } = props;
   useEffect(() => {
+    console.log('data', props);
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         if (!bookingData.userID) {
@@ -48,19 +49,10 @@ const Home = props => {
       }
     });
     getAllTypes();
-    console.log(props);
     BackHandler.addEventListener('hardwareBackPress', () => {
-      if (props.navigation.state.routeName === 'Home') {
-        return true;
-      }
+      return true;
     });
-  }, [
-    bookingData,
-    getAllTypes,
-    props.navigation,
-    saveUserObject,
-    selectedServiceData,
-  ]);
+  }, [bookingData, getAllTypes, props, saveUserObject, selectedServiceData]);
   const showService = () => {
     if (showDropDown) {
       setDropDown(false);
@@ -70,15 +62,6 @@ const Home = props => {
   };
   const getAllTypes = () => {
     getTypes();
-    if (types.length) {
-      typeSelected(types[0]);
-      if (categories.length) {
-        getServiceList(categories[0]);
-        if (services.length) {
-          userSelectedService(services[0]);
-        }
-      }
-    }
   };
   const goToDateTime = () => {
     if (!bookingData.serviceID) {
@@ -172,10 +155,29 @@ const Home = props => {
                     }
                     key={index}
                     onPress={() => userSelectedService(service)}>
-                    <Image style={styles.slideIcon} source={HomeIcon1} />
+                    <Image
+                      style={styles.slideIcon}
+                      source={{uri: service.image}}
+                    />
                     <Text style={styles.slideText}>{service.name}</Text>
                   </TouchableOpacity>
                 ))}
+              </View>
+            </ScrollView>
+          ) : (
+            []
+          )}
+          {!services.length ? (
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}>
+              <View style={styles.slideBoxes}>
+                <TouchableOpacity style={styles.iconBox}>
+                  <Image style={styles.slideIcon} source={Select} />
+                  <Text style={styles.slideText}>
+                    Select Service from above
+                  </Text>
+                </TouchableOpacity>
               </View>
             </ScrollView>
           ) : (
@@ -352,8 +354,8 @@ const styles = StyleSheet.create({
     borderRightColor: '#fdb924',
   },
   slideIcon: {
-    // width: 53,
-    // height: 47,
+    width: 53,
+    height: 47,
     marginBottom: 10,
   },
   slideText: {

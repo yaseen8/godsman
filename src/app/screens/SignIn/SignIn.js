@@ -38,7 +38,7 @@ const SignIn = props => {
     if (auth.number.includes('+92')) {
       login(auth);
     } else {
-      alert('Phone number must start with +92');
+      alert('Phone number must start with country code (+92)');
     }
   };
   const codeConfirmation = () => {

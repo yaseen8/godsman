@@ -1,18 +1,19 @@
 import {authConstants} from './constants';
 import firebase from 'react-native-firebase';
+let result;
 
 const login = auth => dispatch => {
   dispatch({type: authConstants.LOGIN_REQUEST});
   firebase
     .auth()
-    .signInWithPhoneNumber(auth.number)
+    .signInWithPhoneNumber(auth.number, true)
     .then(data => {
+      result = data;
       dispatch({type: authConstants.CODE_RECEIVED, payload: data});
     })
     .catch(error => {
       const errors = [];
       errors.push(error.message);
-      alert(errors);
       dispatch({type: authConstants.LOGIN_FAILURE, payload: errors});
     });
 };
@@ -22,7 +23,8 @@ const confirmCode = (
   confirmationCode,
   props,
 ) => dispatch => {
-  confirmationResult
+  console.log(confirmationResult);
+  result
     .confirm(confirmationCode)
     .then(user => {
       console.log(user);
@@ -39,7 +41,6 @@ const confirmCode = (
     .catch(error => {
       const errors = [];
       errors.push(error.message);
-      alert(errors);
       dispatch({type: authConstants.LOGIN_FAILURE, payload: errors});
     });
 };

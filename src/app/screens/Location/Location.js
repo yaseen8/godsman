@@ -197,6 +197,9 @@ const Location = props => {
                 provider={PROVIDER_GOOGLE}
                 style={styles.mapImg}
                 initialRegion={mapRegion}
+                showsUserLocation={true}
+                showsMyLocationButton={true}
+                followsUserLocation={true}
                 onRegionChange={e => changeRegion(e)}
                 onRegionChangeComplete={e =>
                   getLocationFromLatLong(e.latitude, e.longitude)
@@ -214,13 +217,19 @@ const Location = props => {
         </View>
 
         <View style={styles.stepsFooter}>
+          <TouchableOpacity
+            style={styles.stepBtn}
+            onPress={() => props.navigation.navigate('DateTime')}>
+            <Image source={ArrowIcon} style={styles.backArrow} />
+          </TouchableOpacity>
           <View style={styles.stepsInfo}>
             <View style={styles.stepCol}>
               <View style={styles.stepDot} />
               <Text style={styles.stepText}>Step 3/3</Text>
             </View>
-            <Text style={styles.stepDesc}>Thats all!</Text>
-            <Text style={styles.stepDesc}>Click Next to complete.</Text>
+            <Text style={styles.stepDesc}>
+              Thats all! Click Next to complete.
+            </Text>
           </View>
           {!bookingStart && (
             <TouchableOpacity
@@ -391,6 +400,11 @@ const styles = StyleSheet.create({
   stepArrow: {
     transform: [{rotate: '-90deg'}],
     marginLeft: 6,
+  },
+  backArrow: {
+    transform: [{rotate: '-270deg'}],
+    width: 30,
+    height: 25,
   },
   markerFixed: {
     left: '50%',
